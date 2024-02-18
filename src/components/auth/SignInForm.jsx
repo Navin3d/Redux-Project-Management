@@ -1,26 +1,29 @@
-import { GoogleOutlined } from "@ant-design/icons";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { isM2FEnabled, login, isAuthenticated } from "../../services/auth-service";
+import OAuth from "./OAuth";
 
 const INITIAL_FORM = {
-    email: "",
+    userName: "",
     password: "",
     otp: "null"
 };
 
-function SignInForm() {
+const SignInForm = _ => {
 
+    const navigate = useNavigate();
     const [state, setState] = useState(INITIAL_FORM);
     const [m2fEnabled, setM2fEnabled] = useState(false);
+    const [authenticated, setAuthenticated] = useState(isAuthenticated());
 
     const handleChange = evt => {
         const { name, value } = evt.target;
-
-        if(name == "email") {
-            if(value == "smnavin65@gmail.com") {
-                setM2fEnabled(() => true);
-            }
+        if (name == "userName") {
+            isM2FEnabled(value)
+                .then(s => {
+                    setM2fEnabled(_ => s.data);
+                });
         }
-
         setState({
             ...state,
             [name]: value
@@ -29,33 +32,26 @@ function SignInForm() {
 
     const handleOnSubmit = evt => {
         evt.preventDefault();
-
-        const { email, password, otp } = state;
-        alert(`You are login with email: ${email} and password: ${password} otp: ${otp}`);        
-
-        for (const key in state) {
-            setState({
-                ...state,
-                [key]: ""
-            });
-        }
+        const auth = login(state);
+        setAuthenticated(_ => auth);
     };
+
+    useEffect(_ => {
+        if(authenticated)
+            navigate("/");
+    }, [authenticated]);
 
     return (
         <div className="form-container sign-in-container">
             <form>
                 <h1>Sign in</h1>
-                <div className="social-container">
-                    <a href="#" className="social">
-                        <GoogleOutlined />
-                    </a>
-                </div>
+                <OAuth />
                 <span>or use your account</span>
                 <input
-                    type="email"
-                    placeholder="Email"
-                    name="email"
-                    value={state.email}
+                    type="userName"
+                    placeholder="User Name"
+                    name="userName"
+                    value={state.userName}
                     onChange={handleChange}
                 />
                 <input

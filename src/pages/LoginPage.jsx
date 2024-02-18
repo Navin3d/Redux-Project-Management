@@ -1,10 +1,15 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { isAuthenticated } from "../services/auth-service";
 import SignInForm from "../components/auth/SignInForm";
 import SignUpForm from "../components/auth/SignUpForm";
 
 const LoginPage = () => {
+
+    const navigate = useNavigate();
+    const [authenticated, setAuthenticated] = useState(isAuthenticated());
     const [type, setType] = useState("signIn");
-    
+
     const handleOnClick = text => {
         if (text !== type) {
             setType(text);
@@ -13,7 +18,13 @@ const LoginPage = () => {
     };
     const containerClass =
         "container " + (type === "signUp" ? "right-panel-active" : "");
-        
+
+    useEffect(_ => {
+        setAuthenticated(_ => isAuthenticated());
+        if (authenticated)
+            navigate("/");
+    }, [authenticated]);
+
     return (
         <div className="App">
             <h2>Sign in/up Form</h2>

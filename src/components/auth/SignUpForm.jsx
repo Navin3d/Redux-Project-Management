@@ -1,12 +1,14 @@
-import { GoogleOutlined } from "@ant-design/icons";
-import React from "react";
+import { useState } from "react";
+import OAuth from "./OAuth";
 
-function SignUpForm() {
-    const [state, setState] = React.useState({
-        name: "",
-        email: "",
-        password: ""
-    });
+const INITIAL_FORM = {
+    name: "",
+    email: "",
+    password: ""
+}
+
+const SignUpForm = _ => {
+    const [state, setState] = useState(INITIAL_FORM);
     const handleChange = evt => {
         const value = evt.target.value;
         setState({
@@ -35,11 +37,7 @@ function SignUpForm() {
         <div className="form-container sign-up-container">
             <form onSubmit={handleOnSubmit}>
                 <h1>Create Account</h1>
-                <div className="social-container">
-                    <a href="#" className="social">
-                        <GoogleOutlined />
-                    </a>
-                </div>
+                <OAuth />
                 <span>or use your email for registration</span>
                 <input
                     type="text"

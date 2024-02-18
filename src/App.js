@@ -3,6 +3,7 @@ import HomePage from "./pages";
 import { NotFound } from "./components/Results";
 import LoginPage from "./pages/LoginPage";
 import ProtectedComponent from "./components/ProtectedComponent";
+import OAuthPage from "./pages/OAuthPage";
 
 
 const routes = createBrowserRouter([
@@ -13,6 +14,10 @@ const routes = createBrowserRouter([
   {
     path: "/login",
     element: <LoginPage />
+  },
+  {
+    path: "/oauth/:id",
+    element: <OAuthPage />
   },
   {
     path: "*",
