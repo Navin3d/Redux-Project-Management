@@ -6,6 +6,7 @@ import ProtectedComponent from "./components/ProtectedComponent";
 import OAuthPage from "./pages/OAuthPage";
 import ProjectPage from "./pages/project/ProjectPage";
 import ProjectListPage from "./pages/project/ProjectListPage";
+import TaskListPage from "./pages/task/TaskListPage";
 
 
 const routes = createBrowserRouter([
@@ -24,6 +25,10 @@ const routes = createBrowserRouter([
   {
     path: "/projects/:kind",
     element: <ProjectListPage />
+  },
+  {
+    path: "/tasks/:kind/:status",
+    element: <TaskListPage />
   },
   {
     path: "/project/:id",

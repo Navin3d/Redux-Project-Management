@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Avatar, Button, List } from 'antd';
 
@@ -14,6 +15,10 @@ const DeveloperList = ({ kind = 'developers' }) => {
             <Button key="list-loadmore-Reject">Reject</Button>&nbsp;
         </div>
     );
+
+    useEffect(_ => {
+        console.log(`DeveloperList Refreshed to use kind: ${kind}.`);
+    }, [kind]);
 
     return (
         <List

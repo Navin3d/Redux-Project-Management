@@ -19,9 +19,12 @@ const projectSlice = createSlice({
             state.isAdmin = action.payload.isAdmin;
             state.isDeveloper = action.payload.isDeveloper;
             state.hasRequested = action.payload.hasRequested;
-        }
+        },
+        destroyProject: (state) => {
+            state = {};
+        },
     }
 });
 
-export const { init, projectStatus, requestJoin, setFilter } = projectSlice.actions;
+export const { init, projectStatus, requestJoin, setFilter, destroyProject } = projectSlice.actions;
 export default projectSlice.reducer;

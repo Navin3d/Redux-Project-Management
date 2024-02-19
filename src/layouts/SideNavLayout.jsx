@@ -7,7 +7,7 @@ import FooterComponent from '../components/base/Footer';
 const { Content, Sider } = Layout;
 
 
-const SideNavLayout = ({ element, breadcrumb = [{ title: "/" }] }) => {
+const SideNavLayout = ({ element, breadcrumb = [{ title: "Projects" }] }) => {
     const navigate = useNavigate();
     const {
         token: { colorBgContainer, borderRadiusLG },
@@ -44,17 +44,17 @@ const SideNavLayout = ({ element, breadcrumb = [{ title: "/" }] }) => {
                 {
                     key: "Projects Requests",
                     label: "Requested Projects",
-                    onClick: () => { navigate("/projects/requested") }
+                    onClick: () => { navigate("/projects/requestedProjects") }
                 },
                 {
                     key: "Ongoing Projects",
                     label: "Ongoing Projects",
-                    onClick: () => { navigate("/projects/ongoing") }
+                    onClick: () => { navigate("/projects/projects") }
                 },
                 {
                     key: "Admin Projects",
                     label: "Admin Projects",
-                    onClick: () => { navigate("/projects/admin") }
+                    onClick: () => { navigate("/projects/createdProjects") }
                 },
                 {
                     key: "All Projects",
@@ -71,12 +71,12 @@ const SideNavLayout = ({ element, breadcrumb = [{ title: "/" }] }) => {
                 {
                     key: "Pending Tasks",
                     label: "Pending Tasks",
-                    onClick: () => { navigate("/tasks/pending") }
+                    onClick: () => { navigate("/tasks/auth/pending") }
                 },
                 {
                     key: "Completed Tasks",
                     label: "Completed Tasks",
-                    onClick: () => { navigate("/tasks/completed") }
+                    onClick: () => { navigate("/tasks/auth/completed") }
                 },
             ],
         },

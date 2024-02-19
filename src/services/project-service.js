@@ -1,6 +1,65 @@
 import api from "./axios-config";
 
 
+export const fetchProjects = _ => {
+    const GET_ALL_PROJECT_QUERY = `query {
+        projects {
+            id
+            tittle
+            description
+            icon
+            status
+            tasks {
+                id
+                tittle
+                description
+                comments
+                status
+                assignedTo
+                projectId
+                deadline
+                updatedAt
+                createdAt
+            }
+            requestedDevelopers {
+                id
+                profilePicUrl
+                name
+                username
+                enabledM2F
+                email
+                githubProfile
+                linkedInProfile
+                authProvider
+            }
+            developers {
+                id
+                profilePicUrl
+                name
+                username
+                enabledM2F
+                email
+                githubProfile
+                linkedInProfile
+                authProvider
+            }
+            createdBy {
+                id
+                profilePicUrl
+                name
+                username
+                enabledM2F
+                email
+                githubProfile
+                linkedInProfile
+                authProvider
+            }
+            createdAt
+        }
+    }`;
+    return api.post("/graphql", { query: GET_ALL_PROJECT_QUERY });
+};
+
 export const fetchProject = id => {
     const GET_PROJECT_QUERY = `query {
         project(id: "${id}") {

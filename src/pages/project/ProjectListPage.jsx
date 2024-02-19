@@ -1,12 +1,13 @@
 import { useParams } from "react-router-dom";
+import ProjectList from "../../components/project/ProjectList";
+import SideNavLayout from "../../layouts/SideNavLayout";
 
-const ProjectListPage = ({ element = "No Element" }) => {
+const ProjectListPage = () => {
     const { kind } = useParams();
 
     return (
         <div>
-            kind: {kind}
-            { element }
+            <SideNavLayout element={<ProjectList kind={kind} />} />
         </div>
     );
 };

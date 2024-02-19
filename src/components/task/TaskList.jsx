@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { Avatar, Button, List, Modal } from 'antd';
 import { init } from "../../redux/project-slice";
 import { toggleTaskStatus } from "../../services/task-service";
 import { fetchProject } from "../../services/project-service";
 
-const TaskList = ({ kind = 'auth' }) => {
+const TaskList = ({ kind = 'auth', status = "all" }) => {
     const dispatch = useDispatch();
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -14,9 +14,12 @@ const TaskList = ({ kind = 'auth' }) => {
     const userId = useSelector(state => state.auth.id);
     const isAdmin = useSelector(state => state.project.isAdmin);
     const isDeveloper = useSelector(state => state.project.isDeveloper);
-    const tasks = useSelector(state => state[kind].tasks);
+    let tasks = useSelector(state => state[kind].tasks);
 
+    console.log("tasks ", tasks);
     console.log("project ", project);
+    console.log("kind ", kind);
+    console.log("status ", status);
     // console.log("isAdmin ", isAdmin);
     // console.log("isDeveloper ", isDeveloper);
 
@@ -38,6 +41,15 @@ const TaskList = ({ kind = 'auth' }) => {
                 </div>
             );
     }
+
+    useEffect(_ => {
+        if(status == "completed") {
+            tasks = tasks.filter(task => !task.status);
+        }
+        if(status == "pending") {
+            tasks = tasks.filter(task => task.status);
+        }
+    }, [kind, status]);
 
     const showModal = (id) => {
         setIsModalOpen(true);
