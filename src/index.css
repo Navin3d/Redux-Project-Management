@@ -1,15 +1,6 @@
 .App {
     font-family: sans-serif;
     text-align: center;
-}
-
-@import url("https://fonts.googleapis.com/css?family=Montserrat:400,800");
-
-* {
-    box-sizing: border-box;
-}
-
-body {
     background: #f6f5f7;
     display: flex;
     justify-content: center;
@@ -19,6 +10,27 @@ body {
     height: 100vh;
     margin: -20px 0 50px;
 }
+
+@import url("https://fonts.googleapis.com/css?family=Montserrat:400,800");
+
+* {
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+}
+
+/* body {
+    background: #f6f5f7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: "Montserrat", sans-serif;
+    height: 100vh;
+    margin: -20px 0 50px;
+} */
 
 h1 {
     font-weight: bold;
@@ -41,7 +53,7 @@ span {
     font-size: 12px;
 }
 
-a {
+.App a {
     color: #333;
     font-size: 14px;
     text-decoration: none;
@@ -255,4 +267,40 @@ footer i {
 footer a {
     color: #3c97bf;
     text-decoration: none;
+}
+
+/*=============================================================================================================================================
+=================================================== COURSE CONTENTS ====================================================================================
+============================================================================================================================================*/
+
+.course-header {
+    /* background-image: url("../images/CourseDetail.jpeg"); */
+    padding: 6%;
+}
+
+.course-contents {
+    border-top: 1px solid #bfbfbf;
+    padding-bottom: 60px;
+}
+
+.course-features {
+    font-family: 'Crimson Text', serif;
+    font-family: 'Great Vibes', cursive;
+    border-radius: 1%;
+    box-shadow: 10px 10px 5px #aaaaaa;
+    border-top: 1px solid #bfbfbf;
+    margin-bottom: 2%;
+}
+
+.course-feature {
+    text-align: center;
+    border: 3px solid #999;
+    border-radius: 5%;
+    margin: 5%;
+    padding: 5%;
+}
+
+.feature-icon {
+    color: #999;
+    margin-bottom: 5%;
 }

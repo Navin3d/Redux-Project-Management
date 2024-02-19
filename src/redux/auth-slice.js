@@ -1,13 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { USER_ID_KEY, JWT_TOKEN_KEY, IS_AUTHENTICATED_KEY, verifyJwt } from "../services/auth-service";
+import { DEVELOPER } from "../data";
+import { JWT_TOKEN_KEY, verifyJwt } from "../services/auth-service";
 
+
+const token = localStorage.getItem(JWT_TOKEN_KEY);
+const authenticated = verifyJwt(token);
 
 const initialState = {
-    name: "Navin3d",
-    userId: localStorage.getItem(USER_ID_KEY),
-    profilePic: "https://avatars.githubusercontent.com/u/71096790?v=4",
-    authenticated: localStorage.getItem(IS_AUTHENTICATED_KEY),
-    token: localStorage.getItem(JWT_TOKEN_KEY),
+    ...DEVELOPER,
+    authenticated,
+    token,
 };
 
 export const authSlice = createSlice({
@@ -18,9 +20,9 @@ export const authSlice = createSlice({
             state = action;
         },
         setToken: (state, action) => {
-            const token = verifyJwt(action.payload);
-            state.token = token;
-            state.authenticated = token && true;
+            const authenticated = verifyJwt(action.payload);
+            state.token = action.payload;
+            state.authenticated = authenticated;
         },
         reset: (state) => {
             state = {};
@@ -29,5 +31,4 @@ export const authSlice = createSlice({
 });
 
 export const { init, reset, setToken } = authSlice.actions;
-
 export default authSlice.reducer;

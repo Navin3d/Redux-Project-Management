@@ -4,6 +4,8 @@ import { NotFound } from "./components/Results";
 import LoginPage from "./pages/LoginPage";
 import ProtectedComponent from "./components/ProtectedComponent";
 import OAuthPage from "./pages/OAuthPage";
+import ProjectPage from "./pages/project/ProjectPage";
+import ProjectListPage from "./pages/project/ProjectListPage";
 
 
 const routes = createBrowserRouter([
@@ -18,6 +20,14 @@ const routes = createBrowserRouter([
   {
     path: "/oauth/:id",
     element: <OAuthPage />
+  },
+  {
+    path: "/projects/:kind",
+    element: <ProjectListPage />
+  },
+  {
+    path: "/project/:id",
+    element: <ProjectPage />
   },
   {
     path: "*",
