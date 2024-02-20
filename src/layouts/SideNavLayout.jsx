@@ -1,5 +1,5 @@
 import { createElement, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { ExperimentOutlined, UserOutlined, BarsOutlined } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme, Modal } from 'antd';
 import { toggleM2F } from '../services/auth-service';
@@ -69,17 +69,19 @@ const SideNavLayout = ({ element, breadcrumb = [{ title: "Projects" }] }) => {
                 {
                     key: "Projects Requests",
                     label: "Requested Projects",
-                    onClick: () => { navigate("/projects/requestedProjects") }
+                    onClick: () => { 
+                        navigate("/projects/requestedProjects", { replace: true });
+                    }
                 },
                 {
                     key: "Ongoing Projects",
                     label: "Ongoing Projects",
-                    onClick: () => { navigate("/projects/projects") }
+                    onClick: () => { navigate("/projects/projects", { replace: true }) }
                 },
                 {
                     key: "Admin Projects",
                     label: "Admin Projects",
-                    onClick: () => { navigate("/projects/createdProjects") }
+                    onClick: () => { navigate("/projects/createdProjects", { replace: true }) }
                 },
                 {
                     key: "All Projects",
@@ -147,7 +149,7 @@ const SideNavLayout = ({ element, breadcrumb = [{ title: "Projects" }] }) => {
                     <Content
                         style={{
                             padding: '0 24px',
-                            minHeight: 280,
+                            minHeight: 250,
                         }}
                     >
                         {element}

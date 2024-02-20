@@ -14,17 +14,23 @@ export const isM2FEnabled = emailId => api.get(`/auth/${emailId}`)
 
 export const login = data => api.post(`/auth/login`, data)
     .then(response => {
-        let authenticated;
+        let userId;
         const jwt = response.data["access_token"];
         if (jwt) {
-            authenticated = verifyJwt(jwt);
+            userId = verifyJwt(jwt);
         }
-        return authenticated;
+        return getDeveloper().then(res => {
+            return {
+                ...res.data["data"]["developer"],
+                authenticated: true,
+                token: jwt,
+            }
+        });
     });
 
 export const toggleM2F = (status) => {
     const userId = localStorage.getItem(USER_ID_KEY);
-    api.get(`/auth/${userId}/m2f/${status}`);
+    return api.get(`/auth/${userId}/m2f/${status}`);
 }
 
 export const verifyJwt = jwt => {
@@ -42,6 +48,47 @@ export const verifyJwt = jwt => {
         localStorage.setItem(USER_ID_KEY, userId);
         return userId;
     }
+}
+
+export const getDeveloper = _ => {
+    const id = localStorage.getItem(USER_ID_KEY);
+    const query = `query {
+        developer (id: "${id}") {
+            id
+            profilePicUrl
+            tasks {
+                id
+                tittle
+                description
+                assignedTo
+                projectId
+            }
+            projects {
+                id
+                tittle
+                description
+                icon
+                status
+            }
+            requestedProjects {
+                id
+                tittle
+                description
+                icon
+                status
+            }
+            createdProjects {
+                id
+                tittle
+                description
+                icon
+                status
+            }
+        }
+    }`;
+    const authorization = localStorage.getItem(JWT_TOKEN_KEY);
+    console.log("Backend call developer")
+    return api.post(`/graphql`, { query }, { headers: { Authorization: `Bearer ${authorization}` } });
 }
 
 export const isAuthenticated = _ => localStorage.getItem(IS_AUTHENTICATED_KEY);

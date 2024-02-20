@@ -1,14 +1,14 @@
 export let PROJECTS = [
     {
         "id": "1",
-        "title": "Project A",
+        "tittle": "Project A",
         "description": "This is project A description.",
         "icon": "project_icon_url",
         "status": true,
         "tasks": [
             {
                 "id": "task1",
-                "title": "Task 1",
+                "tittle": "Task 1",
                 "description": "This is task 1 description.",
                 "comments": "Some comments on task 1",
                 "status": "in progress",
@@ -74,14 +74,14 @@ export const DEVELOPER = {
     "tasks": [
         {
             "id": 1,
-            "title": "Task 1",
+            "tittle": "Task 1",
             "status": true,
             "description": "This is task 1 description.",
             "assignedTo": 123,
         },
         {
             "id": 2,
-            "title": "Task 2",
+            "tittle": "Task 2",
             "status": false,
             "description": "This is task 2 description.",
             "assignedTo": 123,
@@ -90,14 +90,14 @@ export const DEVELOPER = {
     "projects": [
         {
             "id": 1,
-            "title": "Project A",
+            "tittle": "Project A",
             "description": "This is project A description.",
             "icon": "project_icon_url",
             "status": "ongoing"
         },
         {
             "id": 2,
-            "title": "Project B",
+            "tittle": "Project B",
             "description": "This is project B description.",
             "icon": "project_icon_url",
             "status": "completed"
@@ -106,7 +106,7 @@ export const DEVELOPER = {
     "requestedProjects": [
         {
             "id": 3,
-            "title": "Project C",
+            "tittle": "Project C",
             "description": "This is project C description.",
             "icon": "project_icon_url",
             "status": "pending"
@@ -115,7 +115,7 @@ export const DEVELOPER = {
     "createdProjects": [
         {
             "id": 4,
-            "title": "Project D",
+            "tittle": "Project D",
             "description": "This is project D description.",
             "icon": "project_icon_url",
             "status": "ongoing"

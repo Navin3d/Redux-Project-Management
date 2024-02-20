@@ -16,8 +16,8 @@ root.render(
   </React.StrictMode>
 );
 
-store.subscribe(_ => {
-  console.log("State CHaged");
-})
+store.subscribe(() => {
+  console.log('State has been refreshed or changed.');
+});
 
 reportWebVitals();

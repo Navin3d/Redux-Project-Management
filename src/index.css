@@ -60,7 +60,7 @@ span {
     margin: 15px 0;
 }
 
-button {
+.App button {
     border-radius: 20px;
     border: 1px solid #ff4b2b;
     background-color: #ff4b2b;
@@ -73,20 +73,20 @@ button {
     transition: transform 80ms ease-in;
 }
 
-button:active {
+.App button:active {
     transform: scale(0.95);
 }
 
-button:focus {
+.App button:focus {
     outline: none;
 }
 
-button.ghost {
+.App button.ghost {
     background-color: transparent;
     border-color: #ffffff;
 }
 
-form {
+.App form {
     background-color: #ffffff;
     display: flex;
     align-items: center;
@@ -97,7 +97,7 @@ form {
     text-align: center;
 }
 
-input {
+.App input {
     background-color: #eee;
     border: none;
     padding: 12px 15px;

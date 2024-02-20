@@ -5,7 +5,7 @@ import { LikeOutlined, MessageOutlined, StarOutlined } from '@ant-design/icons';
 import { PROJECTS } from "../../data";
 import { fetchProjects } from "../../services/project-service";
 
-const ProjectList = ({ kind = "ongoing" }) => {
+const ProjectList = ({ kind = "all" }) => {
 
     const [projects, setProjects] = useState(PROJECTS);
     const projectsFromState = useSelector(state => state.auth[kind]);
@@ -14,15 +14,15 @@ const ProjectList = ({ kind = "ongoing" }) => {
         if (kind == "all") {
             fetchProjects()
                 .then(res => {
-                    setProjects(prev => res.data["data"]);
+                    setProjects(prev => res.data["data"]["projects"]);
                 }).catch(e => {
                     console.log(e);
                     setProjects(_ => PROJECTS);
                 });
-        } else {
-            setProjects(_ => projectsFromState);
+        } 
+        else {
+            setProjects(projectsFromState);
         }
-        console.log(kind + " projects ", projects);
     }
 
     useEffect(() => {
@@ -40,6 +40,9 @@ const ProjectList = ({ kind = "ongoing" }) => {
         <List
             itemLayout="vertical"
             size="large"
+            style={{
+                marginBottom: "5%"
+            }}
             pagination={{
                 onChange: (page) => {
                     console.log(page);
@@ -49,7 +52,7 @@ const ProjectList = ({ kind = "ongoing" }) => {
             dataSource={projects}
             renderItem={(item) => (
                 <List.Item
-                    key={item.title}
+                    key={item.id}
                     actions={[
                         <IconText icon={StarOutlined} text="156" key="list-vertical-star-o" />,
                         <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o" />,
@@ -65,7 +68,7 @@ const ProjectList = ({ kind = "ongoing" }) => {
                 >
                     <List.Item.Meta
                         avatar={<Avatar src={item.icon} />}
-                        title={<a href={`/project/${item.id}`}>{item.title}</a>}
+                        title={<a href={`/project/${item.id}`}>{item.tittle}</a>}
                         description={item.description}
                     />
                     {item.content}

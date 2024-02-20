@@ -1,5 +1,5 @@
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
-import HeaderComponent from '../components/base/Header';
+import HeaderComponent from '../components/base/HeaderComponent';
 import FooterComponent from '../components/base/Footer';
 const { Content } = Layout;
 

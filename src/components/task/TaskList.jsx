@@ -83,7 +83,7 @@ const TaskList = ({ kind = 'auth', status = "all" }) => {
                         <List.Item.Meta
                             key={item.id}
                             avatar={<Avatar src={"https://avatars.githubusercontent.com/u/71096790?v=4"} />}
-                            title={item.title}
+                            title={item.tittle}
                             description={item.description}
                         />
                     </List.Item>

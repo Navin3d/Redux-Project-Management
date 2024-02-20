@@ -1,5 +1,5 @@
 import api from "./axios-config";
-
+import { JWT_TOKEN_KEY } from "./auth-service";
 
 export const fetchProjects = _ => {
     const GET_ALL_PROJECT_QUERY = `query {
@@ -57,7 +57,9 @@ export const fetchProjects = _ => {
             createdAt
         }
     }`;
-    return api.post("/graphql", { query: GET_ALL_PROJECT_QUERY });
+    const authorization = localStorage.getItem(JWT_TOKEN_KEY);
+    console.log("Backend call.")
+    return api.post("/graphql", { query: GET_ALL_PROJECT_QUERY }, { headers: { Authorization: `Bearer ${authorization}` } });
 };
 
 export const fetchProject = id => {
@@ -116,6 +118,7 @@ export const fetchProject = id => {
             createdAt
         }
     }`;
+    console.log("Backend call.")
     return api.post("/graphql", { query: GET_PROJECT_QUERY });
 }
 

@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { init } from "../../redux/auth-slice";
 import { isM2FEnabled, login, isAuthenticated } from "../../services/auth-service";
 import OAuth from "./OAuth";
 
@@ -11,6 +13,7 @@ const INITIAL_FORM = {
 
 const SignInForm = _ => {
 
+    const dispath = useDispatch();
     const navigate = useNavigate();
     const [state, setState] = useState(INITIAL_FORM);
     const [m2fEnabled, setM2fEnabled] = useState(false);
@@ -32,12 +35,15 @@ const SignInForm = _ => {
 
     const handleOnSubmit = evt => {
         evt.preventDefault();
-        const auth = login(state);
-        setAuthenticated(_ => auth);
+        login(state).then(res => {
+            dispath(init(res));
+            setAuthenticated(_ => true);
+        }).catch(e => console.log(e));
     };
 
     useEffect(_ => {
-        if(authenticated)
+        setAuthenticated(isAuthenticated());
+        if (authenticated == true)
             navigate("/");
     }, [authenticated]);
 

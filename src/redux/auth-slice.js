@@ -17,7 +17,11 @@ export const authSlice = createSlice({
     initialState,
     reducers: {
         init: (state, action) => {
-            state = action;
+            state.id = action.payload.id;
+            state.profilePicUrl = action.payload.profilePicUrl;
+            state.projects = action.payload.projects;
+            state.requestedProjects = action.payload.requestedProjects;
+            state.createdProjects = action.payload.createdProjects;
         },
         setToken: (state, action) => {
             const authenticated = verifyJwt(action.payload);

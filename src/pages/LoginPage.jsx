@@ -21,8 +21,8 @@ const LoginPage = () => {
         "container " + (type === "signUp" ? "right-panel-active" : "");
 
     useEffect(_ => {
-        setAuthenticated(_ => isAuthenticated());
-        if (authenticated)
+        console.log(authenticated);
+        if (authenticated == "true")
             navigate("/");
     }, [authenticated]);
 
