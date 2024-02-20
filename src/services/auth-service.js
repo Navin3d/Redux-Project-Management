@@ -59,6 +59,7 @@ export const getDeveloper = _ => {
             tasks {
                 id
                 tittle
+                status
                 description
                 assignedTo
                 projectId

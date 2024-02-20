@@ -19,6 +19,7 @@ export const authSlice = createSlice({
         init: (state, action) => {
             state.id = action.payload.id;
             state.profilePicUrl = action.payload.profilePicUrl;
+            state.tasks = action.payload.tasks;
             state.projects = action.payload.projects;
             state.requestedProjects = action.payload.requestedProjects;
             state.createdProjects = action.payload.createdProjects;

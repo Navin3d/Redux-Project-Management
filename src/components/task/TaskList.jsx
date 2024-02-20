@@ -34,7 +34,7 @@ const TaskList = ({ kind = 'auth', status = "all" }) => {
             );
     }
 
-    useEffect(_ => {
+    const initTasks = _ => {
         if (status == "completed") {
             setTasks(allUserTasks.filter(task => task.status == false));
         }
@@ -44,6 +44,10 @@ const TaskList = ({ kind = 'auth', status = "all" }) => {
         if (status == "all") {
             setTasks(allUserTasks);
         }
+    }
+
+    useEffect(_ => {
+        initTasks();
     }, [kind, status]);
 
     const showModal = (id) => {
