@@ -76,13 +76,15 @@ export const DEVELOPER = {
             "id": 1,
             "title": "Task 1",
             "status": true,
-            "description": "This is task 1 description."
+            "description": "This is task 1 description.",
+            "assignedTo": 123,
         },
         {
             "id": 2,
             "title": "Task 2",
             "status": false,
-            "description": "This is task 2 description."
+            "description": "This is task 2 description.",
+            "assignedTo": 123,
         }
     ],
     "projects": [

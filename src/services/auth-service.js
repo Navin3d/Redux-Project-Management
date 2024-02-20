@@ -22,6 +22,10 @@ export const login = data => api.post(`/auth/login`, data)
         return authenticated;
     });
 
+export const toggleM2F = (status) => {
+    const userId = localStorage.getItem(USER_ID_KEY);
+    api.get(`/auth/${userId}/m2f/${status}`);
+}
 
 export const verifyJwt = jwt => {
     let userId = false;

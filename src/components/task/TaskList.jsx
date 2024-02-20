@@ -1,34 +1,26 @@
 import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Avatar, Button, List, Modal } from 'antd';
-import { init } from "../../redux/project-slice";
-import { toggleTaskStatus } from "../../services/task-service";
-import { fetchProject } from "../../services/project-service";
+import { commentTask, toggleTaskStatus } from "../../services/task-service";
 
 const TaskList = ({ kind = 'auth', status = "all" }) => {
-    const dispatch = useDispatch();
 
+    const [taskId, setTaskId] = useState("");
+    const [comment, setComment] = useState("");
+    const [tasks, setTasks] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const project = useSelector(state => state.project);
     const userId = useSelector(state => state.auth.id);
     const isAdmin = useSelector(state => state.project.isAdmin);
     const isDeveloper = useSelector(state => state.project.isDeveloper);
-    let tasks = useSelector(state => state[kind].tasks);
-
-    console.log("tasks ", tasks);
-    console.log("project ", project);
-    console.log("kind ", kind);
-    console.log("status ", status);
-    // console.log("isAdmin ", isAdmin);
-    // console.log("isDeveloper ", isDeveloper);
+    const allUserTasks = useSelector(state => state[kind].tasks);
 
     const onlyAssignedDeveloperOrAdmin = task => {
         if (userId == task.assignedTo || isAdmin)
             return (
                 <div>
                     <Button onClick={() => {
-                        toggleTaskStatus(task.id, !task.status);
+                        toggleTaskStatus(task.id, !task.status).catch(e => console.log(e));
                         if (kind == "project") {
                             // const project = fetchProject(task.projectId);
                             // project
@@ -43,22 +35,36 @@ const TaskList = ({ kind = 'auth', status = "all" }) => {
     }
 
     useEffect(_ => {
-        if(status == "completed") {
-            tasks = tasks.filter(task => !task.status);
+        if (status == "completed") {
+            setTasks(allUserTasks.filter(task => task.status == false));
         }
-        if(status == "pending") {
-            tasks = tasks.filter(task => task.status);
+        if (status == "pending") {
+            setTasks(allUserTasks.filter(task => task.status == true));
+        }
+        if (status == "all") {
+            setTasks(allUserTasks);
         }
     }, [kind, status]);
 
     const showModal = (id) => {
         setIsModalOpen(true);
+        setTaskId(id);
     };
     const handleOk = () => {
-        setIsModalOpen(false);
+        commentTask(taskId, comment)
+            .then(res => {
+                setTaskId("");
+                setComment("");
+                setIsModalOpen(false);
+            })
+            .catch(e => {
+                console.log(e);
+            });
     };
     const handleCancel = () => {
         setIsModalOpen(false);
+        setTaskId("");
+        setComment("");
     };
 
     return (
@@ -83,8 +89,8 @@ const TaskList = ({ kind = 'auth', status = "all" }) => {
                     </List.Item>
                 )}
             />
-            <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-                <input placeholder="Comment" name="comment" value="" />
+            <Modal title="Task Comment" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+                <input placeholder="Comment" name="comment" value={comment} onChange={(e) => setComment(e.target.value)} />
             </Modal>
         </div>
     );

@@ -1,9 +1,11 @@
-import { createElement } from 'react';
+import { createElement, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ExperimentOutlined, UserOutlined, BarsOutlined } from '@ant-design/icons';
-import { Breadcrumb, Layout, Menu, theme } from 'antd';
-import HeaderComponent from '../components/base/Header';
+import { Breadcrumb, Layout, Menu, theme, Modal } from 'antd';
+import { toggleM2F } from '../services/auth-service';
+import HeaderComponent from '../components/base/HeaderComponent';
 import FooterComponent from '../components/base/Footer';
+import ShowQRCode from '../components/auth/ShowQRCode';
 const { Content, Sider } = Layout;
 
 
@@ -12,6 +14,27 @@ const SideNavLayout = ({ element, breadcrumb = [{ title: "Projects" }] }) => {
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
+
+    const [link, setLink] = useState("https://github.com/Navin3d");
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const handleOk = () => {
+        setIsModalOpen(false);
+    };
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleEnableM2F = _ => {
+        toggleM2F(true)
+            .then(res => {
+                setLink(res.data["qrcode_url"]);
+                setIsModalOpen(true);
+            })
+            .catch(e => {
+                setIsModalOpen(true);
+                console.log(e);
+            });
+    }
 
     const subnavItems = [
         {
@@ -22,12 +45,14 @@ const SideNavLayout = ({ element, breadcrumb = [{ title: "Projects" }] }) => {
                 {
                     key: "Disable M2D",
                     label: "Disable M2F",
-                    onClick: () => { navigate("/profile") }
+                    onClick: () => {
+                        toggleM2F(false).catch(e => {console.log(e)});
+                    }
                 },
                 {
                     key: "Enable M2D",
                     label: "Enable M2F",
-                    onClick: () => { navigate("/profile") }
+                    onClick: () => { handleEnableM2F() }
                 },
                 {
                     key: "Profile",
@@ -111,8 +136,8 @@ const SideNavLayout = ({ element, breadcrumb = [{ title: "Projects" }] }) => {
                     >
                         <Menu
                             mode="inline"
-                            defaultSelectedKeys={['1']}
-                            defaultOpenKeys={['sub1']}
+                            defaultSelectedKeys={['All Projects']}
+                            defaultOpenKeys={['project']}
                             style={{
                                 height: '100%',
                             }}
@@ -126,6 +151,9 @@ const SideNavLayout = ({ element, breadcrumb = [{ title: "Projects" }] }) => {
                         }}
                     >
                         {element}
+                        <Modal title="Authenticator Token" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+                            <ShowQRCode link={link} />
+                        </Modal>
                     </Content>
                 </Layout>
             </Content>

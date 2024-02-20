@@ -10,7 +10,7 @@ const DeveloperList = ({ kind = 'developers' }) => {
     // console.log("develoepr kind ", kind);
 
     const ProjectAdminAction = _ => (
-        <div hidden={!isAdmin && kind != "requestedDevelopers"}>
+        <div hidden={!isAdmin || kind != "requestedDevelopers"}>
             <Button key="list-loadmore-edit">Accept</Button>&nbsp;
             <Button key="list-loadmore-Reject">Reject</Button>&nbsp;
         </div>
