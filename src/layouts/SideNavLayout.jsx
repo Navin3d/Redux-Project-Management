@@ -1,22 +1,30 @@
 import { createElement, useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { ExperimentOutlined, UserOutlined, BarsOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
+import { ExperimentOutlined, UserOutlined, ColumnWidthOutlined, FolderOpenOutlined, BugOutlined } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme, Modal } from 'antd';
-import { toggleM2F } from '../services/auth-service';
+import { getProfile, toggleM2F } from '../services/auth-service';
 import HeaderComponent from '../components/base/HeaderComponent';
 import FooterComponent from '../components/base/Footer';
 import ShowQRCode from '../components/auth/ShowQRCode';
+import Profile from '../components/base/Profile';
+import { setProfile } from '../redux/profile-slice';
+import { DEVELOPER } from '../data';
+import { useDispatch } from 'react-redux';
 const { Content, Sider } = Layout;
 
 
 const SideNavLayout = ({ element, breadcrumb = [{ title: "Projects" }] }) => {
+
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
 
+    const [collapsed, setCollapsed] = useState(false);
     const [link, setLink] = useState("https://github.com/Navin3d");
     const [isModalOpen, setIsModalOpen] = useState(false);
+
     const handleOk = () => {
         setIsModalOpen(false);
     };
@@ -36,6 +44,17 @@ const SideNavLayout = ({ element, breadcrumb = [{ title: "Projects" }] }) => {
             });
     }
 
+    const handleOpenProfile = _ => {
+        getProfile("me")
+            .then(res => {
+                dispatch(setProfile(res.data["data"]["developer"]))
+            })
+            .catch(e => {
+                console.log(e);
+                dispatch(setProfile(DEVELOPER))
+            });
+    }
+
     const subnavItems = [
         {
             key: `user`,
@@ -46,7 +65,7 @@ const SideNavLayout = ({ element, breadcrumb = [{ title: "Projects" }] }) => {
                     key: "Disable M2D",
                     label: "Disable M2F",
                     onClick: () => {
-                        toggleM2F(false).catch(e => {console.log(e)});
+                        toggleM2F(false).catch(e => { console.log(e) });
                     }
                 },
                 {
@@ -57,7 +76,7 @@ const SideNavLayout = ({ element, breadcrumb = [{ title: "Projects" }] }) => {
                 {
                     key: "Profile",
                     label: "Profile",
-                    onClick: () => { navigate("/profile") }
+                    onClick: () => { handleOpenProfile() }
                 }
             ],
         },
@@ -69,7 +88,7 @@ const SideNavLayout = ({ element, breadcrumb = [{ title: "Projects" }] }) => {
                 {
                     key: "Projects Requests",
                     label: "Requested Projects",
-                    onClick: () => { 
+                    onClick: () => {
                         navigate("/projects/requestedProjects", { replace: true });
                     }
                 },
@@ -92,7 +111,7 @@ const SideNavLayout = ({ element, breadcrumb = [{ title: "Projects" }] }) => {
         },
         {
             key: `tasks`,
-            icon: createElement(BarsOutlined),
+            icon: createElement(BugOutlined),
             label: `Tasks`,
             children: [
                 {
@@ -104,6 +123,25 @@ const SideNavLayout = ({ element, breadcrumb = [{ title: "Projects" }] }) => {
                     key: "Completed Tasks",
                     label: "Completed Tasks",
                     onClick: () => { navigate("/tasks/auth/completed") }
+                },
+            ],
+        },
+        {
+            key: `Parser`,
+            label: `Parser`,
+            type: "group",
+            children: [
+                {
+                    key: "Parser",
+                    icon: createElement(FolderOpenOutlined),
+                    label: "Upload Projects",
+                    onClick: () => { navigate("/upload") }
+                },
+                {
+                    key: "toggle",
+                    icon: createElement(ColumnWidthOutlined),
+                    label: "Toggle",
+                    onClick: () => { setCollapsed(!collapsed) }
                 },
             ],
         },
@@ -131,6 +169,8 @@ const SideNavLayout = ({ element, breadcrumb = [{ title: "Projects" }] }) => {
                     }}
                 >
                     <Sider
+                        collapsible
+                        collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}
                         style={{
                             background: colorBgContainer,
                         }}
@@ -138,7 +178,6 @@ const SideNavLayout = ({ element, breadcrumb = [{ title: "Projects" }] }) => {
                     >
                         <Menu
                             mode="inline"
-                            defaultSelectedKeys={['All Projects']}
                             defaultOpenKeys={['project']}
                             style={{
                                 height: '100%',
@@ -156,6 +195,7 @@ const SideNavLayout = ({ element, breadcrumb = [{ title: "Projects" }] }) => {
                         <Modal title="Authenticator Token" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
                             <ShowQRCode link={link} />
                         </Modal>
+                        <Profile />
                     </Content>
                 </Layout>
             </Content>

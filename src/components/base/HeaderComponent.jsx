@@ -1,9 +1,14 @@
 import { Avatar, Layout, Menu } from 'antd';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { DEVELOPER } from '../../data';
+import { setProfile } from '../../redux/profile-slice';
+import { getProfile } from '../../services/auth-service';
 const { Header } = Layout;
 
 const HeaderComponent = () => {
 
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const navItems = [
@@ -20,7 +25,16 @@ const HeaderComponent = () => {
         {
             key: "Profile",
             label: "Profile",
-            onClick: () => { navigate("/profile") }
+            onClick: () => {
+                getProfile("me")
+                    .then(res => {
+                        dispatch(setProfile(res.data["data"]["developer"]))
+                    })
+                    .catch(e => {
+                        console.log(e);
+                        dispatch(setProfile(DEVELOPER))
+                    });
+            }
         },
         {
             key: "Logout",

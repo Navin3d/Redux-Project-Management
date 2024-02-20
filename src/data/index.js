@@ -16,7 +16,11 @@ export let PROJECTS = [
                 "projectId": "1",
                 "deadline": "2024-03-15",
                 "updatedAt": "2024-02-18T15:30:00Z",
-                "createdAt": "2024-02-15T10:00:00Z"
+                "createdAt": "2024-02-15T10:00:00Z",
+                comments: [
+                    "Hi",
+                    "Hello"
+                ]
             }
         ],
         "requestedDevelopers": [
@@ -78,6 +82,10 @@ export const DEVELOPER = {
             "status": true,
             "description": "This is task 1 description.",
             "assignedTo": 123,
+            comments: [
+                "Hi",
+                "Hello"
+            ]
         },
         {
             "id": 2,
@@ -85,6 +93,10 @@ export const DEVELOPER = {
             "status": false,
             "description": "This is task 2 description.",
             "assignedTo": 123,
+            comments: [
+                "Hi",
+                "Hello"
+            ]
         }
     ],
     "projects": [

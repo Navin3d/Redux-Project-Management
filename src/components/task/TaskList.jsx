@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from "react-redux";
-import { Avatar, Button, List, Modal } from 'antd';
+import { Avatar, Button, List, Modal, Input } from 'antd';
 import { commentTask, toggleTaskStatus } from "../../services/task-service";
 
 const TaskList = ({ kind = 'auth', status = "all" }) => {
@@ -55,15 +55,19 @@ const TaskList = ({ kind = 'auth', status = "all" }) => {
         setTaskId(id);
     };
     const handleOk = () => {
-        commentTask(taskId, comment)
-            .then(res => {
-                setTaskId("");
-                setComment("");
-                setIsModalOpen(false);
-            })
-            .catch(e => {
-                console.log(e);
-            });
+        if (comment.trim().length > 0)
+            commentTask(taskId, comment)
+                .then(res => {
+                    setTaskId("");
+                    setComment("");
+                    setIsModalOpen(false);
+                })
+                .catch(e => {
+                    console.log(e);
+                });
+        setTaskId("");
+        setComment("");
+        setIsModalOpen(false);
     };
     const handleCancel = () => {
         setIsModalOpen(false);
@@ -80,7 +84,7 @@ const TaskList = ({ kind = 'auth', status = "all" }) => {
                     <List.Item
                         key={item.id}
                         actions={[
-                            <Button disabled={!isAdmin || !isDeveloper} onClick={() => showModal(item.id)} key="list-loadmore-edit">comment</Button>,
+                            <Button disabled={!isAdmin && !isDeveloper && kind != "auth"} onClick={() => showModal(item.id)} key="list-loadmore-edit">comment</Button>,
                             onlyAssignedDeveloperOrAdmin(item)
                         ]}
                     >
@@ -93,8 +97,11 @@ const TaskList = ({ kind = 'auth', status = "all" }) => {
                     </List.Item>
                 )}
             />
-            <Modal title="Task Comment" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-                <input placeholder="Comment" name="comment" value={comment} onChange={(e) => setComment(e.target.value)} />
+            <Modal title="Task Comments" okText="Comment" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+                {
+                    tasks.filter(task => task.id == taskId)[0]?.comments?.map(comment => <h5>{comment}</h5>)
+                }
+                <Input placeholder="Your Comment..." name="comment" value={comment} onChange={(e) => setComment(e.target.value)} />
             </Modal>
         </div>
     );

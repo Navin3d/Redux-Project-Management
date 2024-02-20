@@ -93,3 +93,39 @@ export const getDeveloper = _ => {
 }
 
 export const isAuthenticated = _ => localStorage.getItem(IS_AUTHENTICATED_KEY);
+
+export const getProfile = id => {
+    if(id == "me")
+        id = localStorage.getItem(USER_ID_KEY);
+    const query = `query {
+        developer (id: "${id}") {
+            name
+            username
+            email
+            githubProfile
+            linkedInProfile
+            tasks {
+                status
+            }
+            projects {
+                id
+                tittle
+                icon
+                status
+            }
+            requestedProjects {
+                id
+            }
+            createdProjects {
+                id
+                tittle
+                icon
+                status
+            }
+        }
+    }`;
+    console.log("id ", id);
+    const authorization = localStorage.getItem(JWT_TOKEN_KEY);
+    console.log("Backend call profile")
+    return api.post(`/graphql`, { query }, { headers: { Authorization: `Bearer ${authorization}` } })
+}

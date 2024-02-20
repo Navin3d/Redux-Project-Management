@@ -25,7 +25,7 @@ const ProjectListPage = () => {
 
     return (
         <div>
-            <SideNavLayout element={<ProjectList kind={kind} />} />
+            <SideNavLayout element={<ProjectList kind={kind} />} breadcrumb={[{ title: "Projects" }, { title: "List" }]} />
         </div>
     );
 };

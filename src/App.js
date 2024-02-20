@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import HomePage from "./pages";
 import { NotFound } from "./components/Results";
@@ -7,6 +8,7 @@ import OAuthPage from "./pages/OAuthPage";
 import ProjectPage from "./pages/project/ProjectPage";
 import ProjectListPage from "./pages/project/ProjectListPage";
 import TaskListPage from "./pages/task/TaskListPage";
+import UploadPage from "./pages/UploadPage";
 
 
 const routes = createBrowserRouter([
@@ -35,15 +37,49 @@ const routes = createBrowserRouter([
     element: <ProjectPage />
   },
   {
+    path: "/upload",
+    element: <UploadPage />
+  },
+  {
     path: "*",
     element: <NotFound />
   },
 ]);
 
-const App = () => (
-  <div>
-    <RouterProvider router={routes} />
-  </div>
-);
+
+const App = () => {
+  useEffect(_ => {
+    const handleContextmenu = e => {
+      e.preventDefault()
+    }
+    document.onkeydown = (e) => {
+      if (e.key == 123) {
+        e.preventDefault();
+      }
+      if (e.ctrlKey && e.shiftKey && e.key == 'I') {
+        e.preventDefault();
+      }
+      if (e.ctrlKey && e.shiftKey && e.key == 'C') {
+        e.preventDefault();
+      }
+      if (e.ctrlKey && e.shiftKey && e.key == 'J') {
+        e.preventDefault();
+      }
+      if (e.ctrlKey && e.key == 'U') {
+        e.preventDefault();
+      }
+    };
+    document.addEventListener('contextmenu', handleContextmenu)
+    return function cleanup() {
+      document.removeEventListener('contextmenu', handleContextmenu)
+    }
+  }, [])
+
+  return (
+    <div>
+      <RouterProvider router={routes} />
+    </div>
+  )
+};
 
 export default App;

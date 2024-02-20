@@ -1,9 +1,13 @@
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Avatar, Button, List } from 'antd';
+import { getProfile } from "../../services/auth-service";
+import { DEVELOPER } from "../../data";
+import { setProfile } from "../../redux/profile-slice";
 
 
 const DeveloperList = ({ kind = 'developers' }) => {
+    const dispatch = useDispatch();
     const isAdmin = useSelector(state => state.project.isAdmin);
     const developers = useSelector(state => state.project[kind]);
     // console.log("developers ", developers);
@@ -16,6 +20,17 @@ const DeveloperList = ({ kind = 'developers' }) => {
         </div>
     );
 
+    const handleOpenProfile = id => {
+        getProfile(id)
+            .then(res => {
+                dispatch(setProfile(res.data["data"]["developer"]))
+            })
+            .catch(e => {
+                console.log(e);
+                dispatch(setProfile(DEVELOPER))
+            });
+    }
+
     useEffect(_ => {
         console.log(`DeveloperList Refreshed to use kind: ${kind}.`);
     }, [kind]);
@@ -27,7 +42,7 @@ const DeveloperList = ({ kind = 'developers' }) => {
             renderItem={(item) => (
                 <List.Item
                     key={item.id}
-                    actions={[<a key="list-loadmore-more" href={`/developer/${item.id}`} >Profile</a>, <ProjectAdminAction />]}
+                    actions={[<Button key="list-loadmore-more" onClick={() => handleOpenProfile(item.id)}>Profile</Button>, <ProjectAdminAction />]}
                 >
                     <List.Item.Meta
                         key={item.id}

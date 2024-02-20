@@ -1,11 +1,14 @@
 import FooterComponent from "../components/base/Footer";
 import HeaderComponent from "../components/base/HeaderComponent";
+import Loader from "../components/base/Loader";
+import Profile from "../components/base/Profile";
 
 const HomePage = () => {
     return (
         <div>
             <HeaderComponent />
-            <h1>Hwllo</h1>
+            <Loader />
+            <Profile />
             <FooterComponent />
         </div>
     );
