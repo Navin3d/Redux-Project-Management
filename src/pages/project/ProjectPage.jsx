@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { notification, Tabs } from "antd";
-import { BugOutlined, FieldTimeOutlined, MailOutlined } from "@ant-design/icons";
+import { BugOutlined, ContainerOutlined, FieldTimeOutlined, MailOutlined } from "@ant-design/icons";
 import { fetchProject } from "../../services/project-service";
 import SideNavLayout from "../../layouts/SideNavLayout";
 import ProjectHeader from "../../components/project/ProjectHeader";
@@ -13,6 +13,7 @@ import DeveloperList from "../../components/developer/DeveloperList";
 import { DEVELOPER, PROJECTS } from "../../data";
 import { getDeveloper } from "../../services/auth-service";
 import { initUser } from "../../redux/auth-slice";
+import MarkdownComponent from "../../components/project/Markdown";
 
 
 const Content = _ => {
@@ -20,9 +21,10 @@ const Content = _ => {
     const dispatch = useDispatch();
     const userId = useSelector(state => state.auth.id);
     const [notice, contextHolder] = notification.useNotification();
+    const projectDescription = useSelector(state => state.project?.description);
 
     const initPoject = (projectId) => {
-        const developer = getDeveloper();
+        const developer = getDeveloper().catch(e => console.log(e));
         fetchProject(projectId)
             .then(res => {
                 let projectData = res.data?.data?.project;
@@ -35,12 +37,19 @@ const Content = _ => {
                         const filter = userProjectFilter(receivedDeveloper.id, projectData);
                         dispatch(init(projectData));
                         dispatch(setFilter(filter));
+                    }).catch(e => {
+                        dispatch(initUser(DEVELOPER));
+                        const filter = userProjectFilter(DEVELOPER.id, projectData);
+                        dispatch(init(projectData));
+                        dispatch(setFilter(filter));
                     });
             })
             .catch(e => {
                 console.error(e);
                 let filter = userProjectFilter(userId, PROJECTS[0]);
                 dispatch(setFilter(filter));
+                dispatch(initUser(DEVELOPER));
+                dispatch(init(PROJECTS[0]));
                 notice.warning({
                     message: "Showing Dummy Datas",
                     description: "Error fetching data from backend showing dummy datas.",
@@ -52,18 +61,24 @@ const Content = _ => {
     const tabItems = [
         {
             key: "1",
+            label: "Description",
+            children: <MarkdownComponent content={projectDescription} />,
+            icon: <ContainerOutlined />
+        },
+        {
+            key: "2",
             label: "Developers",
             children: <DeveloperList />,
             icon: <BugOutlined />
         },
         {
-            key: "2",
+            key: "3",
             label: "Tasks",
             children: <TaskList kind={"project"} />,
             icon: <MailOutlined />
         },
         {
-            key: "3",
+            key: "4",
             label: "Requests",
             children: <DeveloperList kind="requestedDevelopers" />,
             icon: <FieldTimeOutlined />

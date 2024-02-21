@@ -114,6 +114,11 @@ const SideNavLayout = ({ element }) => {
                     label: "All Projects",
                     onClick: () => { navigate("/projects/all") }
                 },
+                {
+                    key: "create",
+                    label: "Create Project",
+                    onClick: () => { navigate("/projects/create") }
+                },
             ],
         },
         {

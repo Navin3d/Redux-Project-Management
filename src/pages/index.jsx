@@ -1,15 +1,10 @@
-import FooterComponent from "../components/base/Footer";
-import HeaderComponent from "../components/base/HeaderComponent";
 import Loader from "../components/base/Loader";
-import Profile from "../components/base/Profile";
+import NormalLayout from "../layouts/NormalLayout";
 
 const HomePage = () => {
     return (
         <div>
-            <HeaderComponent />
-            <Loader />
-            <Profile />
-            <FooterComponent />
+            <NormalLayout element={<Loader />} />
         </div>
     );
 };

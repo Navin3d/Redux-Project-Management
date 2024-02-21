@@ -2,7 +2,28 @@ export let PROJECTS = [
     {
         "id": "1",
         "tittle": "Project A",
-        "description": "This is project A description.",
+        "description": `
+        # Project Management App
+
+        Welcome to the Project Management App, a modern and efficient tool built with Spring Reactive WebFlux for managing your projects effortlessly. This app offers a reactive and non-blocking architecture, ensuring high performance and scalability.
+        
+        ## Features
+        
+        - **Reactive Web Interface**: Utilizing Spring WebFlux, the app provides a responsive and interactive user interface.
+        - **Project Management**: Create, update, and delete projects with ease.
+        - **Task Tracking**: Manage tasks within each project, track progress, and mark tasks as complete.
+        - **Reactive Data Access**: Leverage the power of reactive programming with Spring Data MongoDB for efficient data access.
+        - **RESTful API**: Expose a RESTful API for seamless integration with other systems or client applications.
+        - **Security**: Secure your app with Spring Security to protect your data and resources.
+        - **Logging and Monitoring**: Monitor application health and performance with Spring Boot Actuator and Micrometer.
+        
+        ## Getting Started
+        To get started with the Project Management App, follow these steps:
+        
+        # For Maven
+        
+        1. **Clone the Repository**: Clone this repository to your local machine using the following command:
+        `,
         "icon": "project_icon_url",
         "status": true,
         "tasks": [

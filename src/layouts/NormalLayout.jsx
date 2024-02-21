@@ -1,9 +1,10 @@
-import { Breadcrumb, Layout, Menu, theme } from 'antd';
+import { Layout, theme } from 'antd';
 import HeaderComponent from '../components/base/HeaderComponent';
 import FooterComponent from '../components/base/Footer';
+import Profile from '../components/base/Profile';
 const { Content } = Layout;
 
-const NormalLayout = ({ element, breadcrumb = [{ title: "/" }] }) => {
+const NormalLayout = ({ element }) => {
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
@@ -15,12 +16,6 @@ const NormalLayout = ({ element, breadcrumb = [{ title: "/" }] }) => {
                     padding: '0 48px',
                 }}
             >
-                <Breadcrumb
-                    style={{
-                        margin: '16px 0',
-                    }}
-                    items={breadcrumb}
-                />
                 <Layout
                     style={{
                         padding: '24px 0',
@@ -35,6 +30,7 @@ const NormalLayout = ({ element, breadcrumb = [{ title: "/" }] }) => {
                         }}
                     >
                         {element}
+                        <Profile />
                     </Content>
                 </Layout>
             </Content>

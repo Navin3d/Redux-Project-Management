@@ -72,9 +72,6 @@ const ProjectHeader = () => {
                 <Descriptions.Item label="Owner Profile">
                     <Link target="_blank" href={createdBy?.linkedInProfile}>Linked IN</Link>
                 </Descriptions.Item>
-                <Descriptions.Item label="Description">
-                    <p>{description}</p>
-                </Descriptions.Item>
             </Descriptions>
         </PageHeader>
     );

@@ -137,6 +137,8 @@ export const getProfile = id => {
     return api.post(`/graphql`, { query }, { headers: { Authorization: `Bearer ${authorization}` } })
 }
 
+export const getUserId = _ => localStorage.getItem(USER_ID_KEY);
+
 export const logout = _ => {
     localStorage.removeItem(USER_ID_KEY);
     localStorage.removeItem(JWT_TOKEN_KEY);

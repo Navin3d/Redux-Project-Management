@@ -9,6 +9,7 @@ import ProjectPage from "./pages/project/ProjectPage";
 import ProjectListPage from "./pages/project/ProjectListPage";
 import TaskListPage from "./pages/task/TaskListPage";
 import UploadPage from "./pages/UploadPage";
+import CreateProjectPage from "./pages/project/CreateProjectPage";
 
 
 const routes = createBrowserRouter([
@@ -23,6 +24,10 @@ const routes = createBrowserRouter([
   {
     path: "/oauth/:id",
     element: <OAuthPage />
+  },
+  {
+    path: "/projects/create",
+    element: <CreateProjectPage />
   },
   {
     path: "/projects/:kind",
