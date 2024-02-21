@@ -49,7 +49,7 @@ const ShowQRCode = ({ link }) => {
                     ),
                 }}
             />
-            {link != "-" && <QRCode value='https://github.com/Navin3d' icon="https://lh3.googleusercontent.com/a/ACg8ocKIWx-83zJT8Pv6kWwJK-EcR9KpNzllTzXU7YezSl7PYkv4=s96-c" />}
+            {link == "-" && <QRCode value='https://github.com/Navin3d' icon="https://lh3.googleusercontent.com/a/ACg8ocKIWx-83zJT8Pv6kWwJK-EcR9KpNzllTzXU7YezSl7PYkv4=s96-c" />}
             <h3>Download Google Authenticator and Scan this code.</h3>
             <p>Multi-factor authentication is an electronic authentication method in which a user is granted access to a website or application only after successfully presenting two or more pieces of evidence to an authentication mechanism.</p>
         </Space>

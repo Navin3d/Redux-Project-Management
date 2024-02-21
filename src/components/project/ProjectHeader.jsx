@@ -1,9 +1,13 @@
 import { Button, Descriptions } from 'antd';
+import { Link } from 'react-router-dom';
 import { PageHeader } from '@ant-design/pro-layout';
 import { TrophyFilled, ClockCircleOutlined } from "@ant-design/icons";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleProject, requestJoinProject } from '../../services/project-service';
 import { projectStatus, requestJoin } from '../../redux/project-slice';
+import { getProfile } from '../../services/auth-service';
+import { setProfile } from '../../redux/profile-slice';
+import { DEVELOPER } from '../../data';
 
 
 const ProjectHeader = () => {
@@ -11,43 +15,65 @@ const ProjectHeader = () => {
     const dispatch = useDispatch();
     const userId = useSelector(state => state.auth.id);
     const project = useSelector(state => state.project);
-    const { id, status, title, description, developers, createdAt, createdBy, tasks, requestedDevelopers, hasRequested, isAdmin, isDeveloper } = project;
+    const { id, status, tittle, description, developers, createdAt, createdBy, tasks, requestedDevelopers, hasRequested, isAdmin, isDeveloper } = project;
+
+    const openProfile = id => {
+        getProfile(id)
+            .then(res => {
+                dispatch(setProfile(res.data?.data?.developer))
+            })
+            .catch(e => {
+                console.log(e);
+                dispatch(setProfile(DEVELOPER))
+            });
+    }
+
+    const handleToggleProject = _ => {
+        isAdmin &&
+            toggleProject(id, !status).then(_ => dispatch(projectStatus(!status))).catch(e => dispatch(projectStatus(!status)));
+    }
+
+    const handleRequestJoin = _ => {
+        requestJoinProject(id, userId).then(res => {
+            dispatch(requestJoin(!hasRequested));
+        }).catch(e => console.log(e));
+    }
 
     return (
         <PageHeader
             className="site-page-header-responsive"
             onBack={() => window.history.back()}
-            title={title}
-            subTitle={description}
+            title={tittle}
             extra={[
-                <Button disabled={hasRequested} onClick={() => {
-                    requestJoinProject(id, userId).then(e => dispatch(requestJoin(!hasRequested))).catch(e => console.log(e));
-                }} hidden={isAdmin || isDeveloper || !status} key="1" style={{ backgroundColor: "grey", color: "white" }} >
+                <Button disabled={hasRequested} onClick={() => { handleRequestJoin(); }} hidden={isAdmin || isDeveloper || !status} key="1" style={{ backgroundColor: "grey", color: "white" }} >
                     <ClockCircleOutlined /> {hasRequested && status ? "Already Requested" : "Request Join"}
                 </Button>,
-                <Button key="3" onClick={() => { isAdmin && toggleProject(id, !status).then(_ => dispatch(projectStatus(!status))).catch(e => dispatch(projectStatus(!status))) }} style={{ backgroundColor: "green", color: "white" }} >
+                <Button key="3" onClick={() => { handleToggleProject() }} style={{ backgroundColor: "green", color: "white" }} >
                     <TrophyFilled /> {status ? "Active" : "In-Active"}
                 </Button>,
             ]}
         >
             <Descriptions size="default" column={2}>
                 <Descriptions.Item label="Developers Working">
-                    <a>{developers.length}</a>
+                    <Link>{developers.length}</Link>
                 </Descriptions.Item>
                 <Descriptions.Item label="Developers Requested">
-                    <a>{requestedDevelopers.length}</a>
+                    <Link>{requestedDevelopers.length}</Link>
                 </Descriptions.Item>
                 <Descriptions.Item label="Tasks Count">
-                    <a>{tasks.length}</a>
+                    <Link>{tasks.length}</Link>
                 </Descriptions.Item>
                 <Descriptions.Item label="Start Date">
-                    <a>{createdAt.split("T")[0]}</a>
+                    <Link>{createdAt.split("T")[0]}</Link>
                 </Descriptions.Item>
                 <Descriptions.Item label="Project Owner">
-                    <a href={`/developer/${createdBy["id"]}`}>{createdBy["name"]}</a>
+                    <Link onClick={() => { openProfile(createdBy["id"]) }}>{createdBy?.name}</Link>
                 </Descriptions.Item>
                 <Descriptions.Item label="Owner Profile">
-                    <a href={createdBy["linkedInProfile"]}>Linked IN</a>
+                    <Link target="_blank" href={createdBy?.linkedInProfile}>Linked IN</Link>
+                </Descriptions.Item>
+                <Descriptions.Item label="Description">
+                    <p>{description}</p>
                 </Descriptions.Item>
             </Descriptions>
         </PageHeader>

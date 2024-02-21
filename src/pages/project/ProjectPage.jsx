@@ -10,7 +10,9 @@ import { init, setFilter } from "../../redux/project-slice";
 import { userProjectFilter } from "../../services/filters/project-filter";
 import TaskList from "../../components/task/TaskList";
 import DeveloperList from "../../components/developer/DeveloperList";
-import { PROJECTS } from "../../data";
+import { DEVELOPER, PROJECTS } from "../../data";
+import { getDeveloper } from "../../services/auth-service";
+import { initUser } from "../../redux/auth-slice";
 
 
 const Content = _ => {
@@ -20,20 +22,25 @@ const Content = _ => {
     const [notice, contextHolder] = notification.useNotification();
 
     const initPoject = (projectId) => {
+        const developer = getDeveloper();
         fetchProject(projectId)
             .then(res => {
-                let projectData = res.data["data"];
-                var filter = userProjectFilter(userId, projectData);
-                projectData.isAdmin = filter.isAdmin;
-                projectData.isDeveloper = filter.isDeveloper;
-                projectData.hasRequested = filter.hasRequested;
-                dispatch(init(projectData));
-                // console.log("filter ", filter);
+                let projectData = res.data?.data?.project;
+                projectData = projectData || PROJECTS[0];
+                developer
+                    .then(res => {
+                        let receivedDeveloper = res.data?.data?.developer;
+                        receivedDeveloper = receivedDeveloper || DEVELOPER;
+                        dispatch(initUser(receivedDeveloper));
+                        const filter = userProjectFilter(receivedDeveloper.id, projectData);
+                        dispatch(init(projectData));
+                        dispatch(setFilter(filter));
+                    });
             })
             .catch(e => {
+                console.error(e);
                 let filter = userProjectFilter(userId, PROJECTS[0]);
                 dispatch(setFilter(filter));
-                console.log("filter ", filter);
                 notice.warning({
                     message: "Showing Dummy Datas",
                     description: "Error fetching data from backend showing dummy datas.",

@@ -6,6 +6,8 @@ export const USER_ID_KEY = "prg-mg-id";
 export const IS_AUTHENTICATED_KEY = "prg-mg-auth";
 export const JWT_TOKEN_KEY = "prg-mg-token";
 
+export const isAuthenticated = _ => localStorage.getItem(IS_AUTHENTICATED_KEY);
+
 export const isM2FEnabled = emailId => api.get(`/auth/${emailId}`)
     .then(response => ({
         status: response.status,
@@ -27,6 +29,8 @@ export const login = data => api.post(`/auth/login`, data)
             }
         });
     });
+
+export const registerUser = data => api.post(`/auth`, data);
 
 export const toggleM2F = (status) => {
     const userId = localStorage.getItem(USER_ID_KEY);
@@ -98,8 +102,6 @@ export const getDeveloper = _ => {
     return api.post(`/graphql`, { query }, { headers: { Authorization: `Bearer ${authorization}` } });
 }
 
-export const isAuthenticated = _ => localStorage.getItem(IS_AUTHENTICATED_KEY);
-
 export const getProfile = id => {
     if (id == "me")
         id = localStorage.getItem(USER_ID_KEY);
@@ -130,7 +132,6 @@ export const getProfile = id => {
             }
         }
     }`;
-    console.log("id ", id);
     const authorization = localStorage.getItem(JWT_TOKEN_KEY);
     console.log("Backend call profile")
     return api.post(`/graphql`, { query }, { headers: { Authorization: `Bearer ${authorization}` } })

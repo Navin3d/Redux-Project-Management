@@ -3,30 +3,27 @@ import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import TaskList from "../../components/task/TaskList";
 import SideNavLayout from "../../layouts/SideNavLayout";
-import { init } from "../../redux/auth-slice";
+import { initUser } from "../../redux/auth-slice";
 import { getDeveloper } from "../../services/auth-service";
 
 const TaskListPage = () => {
     const { kind, status } = useParams();
-
     const dispatch = useDispatch();
 
-    const initUser = _ => getDeveloper()
+    const initDeveloper = _ => getDeveloper()
         .then(res => {
-            console.log(res)
-            const developer = res.data["data"]["developer"];
-            dispatch(init(developer));
-            return developer;
+            const developer = res.data?.data?.developer;
+            dispatch(initUser(developer));
         })
         .catch(e => console.log(e));
 
     useEffect(() => {
-        initUser();
+        initDeveloper();
     }, []);
 
     return (
         <div>
-           <SideNavLayout element={<TaskList kind={kind} status={status} />} />
+            <SideNavLayout element={<TaskList kind={kind} status={status} />} />
         </div>
     );
 };

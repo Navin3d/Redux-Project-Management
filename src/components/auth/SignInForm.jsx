@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
+import { notification } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { init } from "../../redux/auth-slice";
+import { initUser } from "../../redux/auth-slice";
 import { isM2FEnabled, login, isAuthenticated } from "../../services/auth-service";
 import OAuth from "./OAuth";
 
@@ -15,6 +16,7 @@ const SignInForm = _ => {
 
     const dispath = useDispatch();
     const navigate = useNavigate();
+    const [notice, contextHolder] = notification.useNotification();
     const [state, setState] = useState(INITIAL_FORM);
     const [m2fEnabled, setM2fEnabled] = useState(false);
     const [authenticated, setAuthenticated] = useState(isAuthenticated());
@@ -36,9 +38,12 @@ const SignInForm = _ => {
     const handleOnSubmit = evt => {
         evt.preventDefault();
         login(state).then(res => {
-            dispath(init(res));
+            dispath(initUser(res));
             setAuthenticated(_ => true);
-        }).catch(e => console.log(e));
+        }).catch(e => {
+            console.log(e.message);
+            notice.error({ message: e.message });
+        });
     };
 
     useEffect(_ => {
@@ -49,6 +54,7 @@ const SignInForm = _ => {
 
     return (
         <div className="form-container sign-in-container">
+            {contextHolder}
             <form>
                 <h1>Sign in</h1>
                 <OAuth />
@@ -59,6 +65,7 @@ const SignInForm = _ => {
                     name="userName"
                     value={state.userName}
                     onChange={handleChange}
+                    required
                 />
                 <input
                     type="password"
@@ -66,6 +73,7 @@ const SignInForm = _ => {
                     placeholder="Password"
                     value={state.password}
                     onChange={handleChange}
+                    required
                 />
                 {
                     m2fEnabled &&
@@ -75,6 +83,7 @@ const SignInForm = _ => {
                         placeholder="Secure Id"
                         value={state.otp}
                         onChange={handleChange}
+                        required
                     />
                 }
                 <a href="#">Forgot your password?</a>

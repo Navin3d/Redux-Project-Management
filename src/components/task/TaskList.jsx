@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Avatar, Button, List, Modal, Input } from 'antd';
 import { commentTask, toggleTaskStatus } from "../../services/task-service";
+import { toggleTask } from '../../redux/auth-slice';
 
 const TaskList = ({ kind = 'auth', status = "all" }) => {
 
@@ -10,36 +11,34 @@ const TaskList = ({ kind = 'auth', status = "all" }) => {
     const [tasks, setTasks] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
+    const dispatch = useDispatch();
     const userId = useSelector(state => state.auth.id);
     const isAdmin = useSelector(state => state.project.isAdmin);
     const isDeveloper = useSelector(state => state.project.isDeveloper);
     const allUserTasks = useSelector(state => state[kind].tasks);
 
+    const handleToggleTask = task => {
+        let restTasks = allUserTasks.filter(userTask => task.id != userTask.id);
+        dispatch(toggleTask({ taskId: task["id"], status: !task.status }));
+        setTasks(prev => restTasks);
+        toggleTaskStatus(task.id, !task.status).catch(e => console.log(e));
+    }
+
     const onlyAssignedDeveloperOrAdmin = task => {
         if (userId == task.assignedTo || isAdmin)
             return (
                 <div>
-                    <Button onClick={() => {
-                        toggleTaskStatus(task.id, !task.status).catch(e => console.log(e));
-                        if (kind == "project") {
-                            // const project = fetchProject(task.projectId);
-                            // project
-                            //     .then(res => {
-                            //         dispatch(init(res.data["data"]));
-                            //     })
-                            //     .catch(e => console.log(e));
-                        }
-                    }} key="list-loadmore-more">{task.status ? "Close" : "Open"}</Button>&nbsp;
+                    <Button onClick={() => { handleToggleTask(task) }} key="list-loadmore-more">{task.status ? "Close" : "Open"}</Button>&nbsp;
                 </div>
             );
     }
 
     const initTasks = _ => {
         if (status == "completed") {
-            setTasks(allUserTasks.filter(task => task.status == false));
+            setTasks(prev => allUserTasks.filter(task => task.status == false));
         }
         if (status == "pending") {
-            setTasks(allUserTasks.filter(task => task.status == true));
+            setTasks(prev =>  allUserTasks.filter(task => task.status == true));
         }
         if (status == "all") {
             setTasks(allUserTasks);

@@ -1,13 +1,18 @@
 import { useState } from "react";
+import { notification } from "antd";
+import { registerUser } from "../../services/auth-service";
 import OAuth from "./OAuth";
 
 const INITIAL_FORM = {
     name: "",
     email: "",
-    password: ""
+    password: "",
+    authProvider: "Native",
 }
 
 const SignUpForm = _ => {
+
+    const [notice, contextHolder] = notification.useNotification();
     const [state, setState] = useState(INITIAL_FORM);
     const handleChange = evt => {
         const value = evt.target.value;
@@ -20,10 +25,17 @@ const SignUpForm = _ => {
     const handleOnSubmit = evt => {
         evt.preventDefault();
 
-        const { name, email, password } = state;
-        alert(
-            `You are sign up with name: ${name} email: ${email} and password: ${password}`
-        );
+        registerUser(state)
+            .then(res => {
+                notice.success({
+                    message: "Sign Successful."
+                });
+            })
+            .catch(e => {
+                notice.error({
+                    message: "Error Signin Try Google Login"
+                });
+            });
 
         for (const key in state) {
             setState({
@@ -35,6 +47,7 @@ const SignUpForm = _ => {
 
     return (
         <div className="form-container sign-up-container">
+            {contextHolder}
             <form onSubmit={handleOnSubmit}>
                 <h1>Create Account</h1>
                 <OAuth />
@@ -45,6 +58,7 @@ const SignUpForm = _ => {
                     value={state.name}
                     onChange={handleChange}
                     placeholder="Name"
+                    required
                 />
                 <input
                     type="email"
@@ -52,6 +66,7 @@ const SignUpForm = _ => {
                     value={state.email}
                     onChange={handleChange}
                     placeholder="Email"
+                    required
                 />
                 <input
                     type="password"
@@ -59,6 +74,7 @@ const SignUpForm = _ => {
                     value={state.password}
                     onChange={handleChange}
                     placeholder="Password"
+                    required
                 />
                 <button>Sign Up</button>
             </form>

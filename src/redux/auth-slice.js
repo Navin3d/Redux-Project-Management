@@ -16,7 +16,7 @@ export const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers: {
-        init: (state, action) => {
+        initUser: (state, action) => {
             state.id = action.payload.id;
             state.profilePicUrl = action.payload.profilePicUrl;
             state.tasks = action.payload.tasks;
@@ -29,6 +29,13 @@ export const authSlice = createSlice({
             state.token = action.payload;
             state.authenticated = authenticated;
         },
+        toggleTask: (state, action) => {
+            const { taskId, status } = action.payload;
+            const taskToUpdate = state.tasks.find(item => item.id === taskId);
+            if (taskToUpdate) {
+                taskToUpdate.status = status;
+            }
+        },
         reset: (state) => {
             state.id = "";
             state.token = "";
@@ -39,5 +46,5 @@ export const authSlice = createSlice({
     },
 });
 
-export const { init, reset, setToken } = authSlice.actions;
+export const { initUser, reset, setToken, toggleTask } = authSlice.actions;
 export default authSlice.reducer;

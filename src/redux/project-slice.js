@@ -6,8 +6,18 @@ const projectSlice = createSlice({
     initialState: PROJECTS[0],
     reducers: {
         init: (state, action) => {
-            if(action.payload)
-                state = action.payload;
+            state.id = action.payload.id;
+            state.tittle = action.payload.tittle;
+            state.description = action.payload.description;
+            state.status = action.payload.status;
+            state.developers = action.payload.developers;
+            state.tasks = action.payload.tasks;
+            state.requestedDevelopers = action.payload.requestedDevelopers;
+            state.createdBy = action.payload.createdBy;
+            state.createdAt = action.payload.createdAt;
+            state.isAdmin = action.payload.isAdmin;
+            state.isDeveloper = action.payload.isDeveloper;
+            state.hasRequested = action.payload.hasRequested;
         },
         projectStatus: (state, action) => {
             state.status = action.payload;
@@ -20,11 +30,17 @@ const projectSlice = createSlice({
             state.isDeveloper = action.payload.isDeveloper;
             state.hasRequested = action.payload.hasRequested;
         },
+        setRequestedDeveloper: (state, actions) => {
+            state.requestedDevelopers = actions.payload;
+        },
+        addDeveloper: (state, actions) => {
+            state.developers.push(actions.payload);
+        },
         destroyProject: (state) => {
             state = PROJECTS[0];
         },
     }
 });
 
-export const { init, projectStatus, requestJoin, setFilter, destroyProject } = projectSlice.actions;
+export const { init, projectStatus, requestJoin, setFilter, destroyProject, setRequestedDeveloper, addDeveloper } = projectSlice.actions;
 export default projectSlice.reducer;

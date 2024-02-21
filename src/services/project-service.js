@@ -119,13 +119,26 @@ export const fetchProject = id => {
         }
     }`;
     console.log("Backend call.")
-    return api.post("/graphql", { query: GET_PROJECT_QUERY });
+    const authorization = localStorage.getItem(JWT_TOKEN_KEY);
+    return api.post("/graphql", { query: GET_PROJECT_QUERY }, { headers: { Authorization: `Bearer ${authorization}` } });
 }
 
-export const toggleProject = (projectId, status) => api.get(`/project/${projectId}/${status}`);
+export const toggleProject = (projectId, status) => {
+    const authorization = localStorage.getItem(JWT_TOKEN_KEY);
+    return api.get(`/project/${projectId}/${status}`, { headers: { Authorization: `Bearer ${authorization}` } });
+}
 
-export const requestJoinProject = (projectId, userId) => api.get(`/project/${projectId}/request/${userId}`);
+export const requestJoinProject = (projectId, userId) => {
+    const authorization = localStorage.getItem(JWT_TOKEN_KEY);
+    return api.get(`/project/${projectId}/request/${userId}`, { headers: { Authorization: `Bearer ${authorization}` } });
+}
 
-export const acceptJoinRequest = (projectId, userId) => api.get(`/project/${projectId}/accept/${userId}`);
+export const acceptJoinRequest = (projectId, userId) => {
+    const authorization = localStorage.getItem(JWT_TOKEN_KEY);
+    return api.get(`/project/${projectId}/accept/${userId}`, { headers: { Authorization: `Bearer ${authorization}` } });
+}
 
-export const rejectJoinRequest = (projectId, userId) => api.get(`/project/${projectId}/reject/${userId}`);
+export const rejectJoinRequest = (projectId, userId) => {
+    const authorization = localStorage.getItem(JWT_TOKEN_KEY);
+    return api.get(`/project/${projectId}/reject/${userId}`, { headers: { Authorization: `Bearer ${authorization}` } });
+}
