@@ -14,7 +14,8 @@ const ProjectList = ({ kind = "all" }) => {
         if (kind == "all") {
             fetchProjects()
                 .then(res => {
-                    setProjects(prev => res.data["data"]["projects"]);
+                    setProjects(prev => res.data?.data?.projects);
+                    setProjects(_ => PROJECTS);
                 }).catch(e => {
                     console.log(e);
                     setProjects(_ => PROJECTS);

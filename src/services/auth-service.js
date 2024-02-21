@@ -30,7 +30,8 @@ export const login = data => api.post(`/auth/login`, data)
 
 export const toggleM2F = (status) => {
     const userId = localStorage.getItem(USER_ID_KEY);
-    return api.get(`/auth/${userId}/m2f/${status}`);
+    const authorization = localStorage.getItem(JWT_TOKEN_KEY);
+    return api.get(`/auth/${userId}/m2f/${status}`, { headers: { Authorization: `Bearer ${authorization}` } });
 }
 
 export const verifyJwt = jwt => {
@@ -38,12 +39,17 @@ export const verifyJwt = jwt => {
     try {
         const decoded = jwtDecode(jwt);
         console.log("decoded: ", decoded);
-        userId = decoded.sub;
-        localStorage.setItem(JWT_TOKEN_KEY, jwt);
-        localStorage.setItem(IS_AUTHENTICATED_KEY, true);
+        if (decoded.exp * 1000 < Date.now()) {
+            logout();
+            console.log("Token expired...");
+        } else {
+            userId = decoded.sub;
+            localStorage.setItem(JWT_TOKEN_KEY, jwt);
+            localStorage.setItem(IS_AUTHENTICATED_KEY, "true");
+        }
     } catch (e) {
         console.log(e);
-        localStorage.setItem(IS_AUTHENTICATED_KEY, false);
+        localStorage.setItem(IS_AUTHENTICATED_KEY, "false");
     } finally {
         localStorage.setItem(USER_ID_KEY, userId);
         return userId;
@@ -95,7 +101,7 @@ export const getDeveloper = _ => {
 export const isAuthenticated = _ => localStorage.getItem(IS_AUTHENTICATED_KEY);
 
 export const getProfile = id => {
-    if(id == "me")
+    if (id == "me")
         id = localStorage.getItem(USER_ID_KEY);
     const query = `query {
         developer (id: "${id}") {
@@ -128,4 +134,11 @@ export const getProfile = id => {
     const authorization = localStorage.getItem(JWT_TOKEN_KEY);
     console.log("Backend call profile")
     return api.post(`/graphql`, { query }, { headers: { Authorization: `Bearer ${authorization}` } })
+}
+
+export const logout = _ => {
+    localStorage.removeItem(USER_ID_KEY);
+    localStorage.removeItem(JWT_TOKEN_KEY);
+    localStorage.removeItem(IS_AUTHENTICATED_KEY);
+    verifyJwt("");
 }

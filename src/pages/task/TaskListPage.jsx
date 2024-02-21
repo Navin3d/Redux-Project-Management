@@ -26,7 +26,7 @@ const TaskListPage = () => {
 
     return (
         <div>
-           <SideNavLayout element={<TaskList kind={kind} status={status} />} breadcrumb={[{ title: "Tasks" }, { title: "List" }]} />
+           <SideNavLayout element={<TaskList kind={kind} status={status} />} />
         </div>
     );
 };

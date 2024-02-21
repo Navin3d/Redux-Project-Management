@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { DEVELOPER } from '../../data';
 import { setProfile } from '../../redux/profile-slice';
 import { getProfile } from '../../services/auth-service';
+import { reset } from '../../redux/auth-slice';
+import { destroyProject } from '../../redux/project-slice';
 const { Header } = Layout;
 
 const HeaderComponent = () => {
@@ -39,7 +41,7 @@ const HeaderComponent = () => {
         {
             key: "Logout",
             label: "Logout",
-            onClick: () => { navigate("/profile") }
+            onClick: () => { dispatch(reset()); dispatch(destroyProject()); }
         },
     ];
 

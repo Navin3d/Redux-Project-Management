@@ -1,5 +1,5 @@
 import { createElement, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { ExperimentOutlined, UserOutlined, ColumnWidthOutlined, FolderOpenOutlined, BugOutlined } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme, Modal } from 'antd';
 import { getProfile, toggleM2F } from '../services/auth-service';
@@ -13,17 +13,22 @@ import { useDispatch } from 'react-redux';
 const { Content, Sider } = Layout;
 
 
-const SideNavLayout = ({ element, breadcrumb = [{ title: "Projects" }] }) => {
+const SideNavLayout = ({ element }) => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const location = useLocation();
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
 
     const [collapsed, setCollapsed] = useState(false);
-    const [link, setLink] = useState("https://github.com/Navin3d");
+    const [link, setLink] = useState("-");
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const urlSplitted = location.pathname.split("/");
+    const selectedKey = urlSplitted[urlSplitted.length - 1];
+    const openedKey = urlSplitted[1];
 
     const handleOk = () => {
         setIsModalOpen(false);
@@ -35,11 +40,13 @@ const SideNavLayout = ({ element, breadcrumb = [{ title: "Projects" }] }) => {
     const handleEnableM2F = _ => {
         toggleM2F(true)
             .then(res => {
-                setLink(res.data["qrcode_url"]);
+                const qrLink = res.data?.qrcode_url;
+                setLink(qrLink);
                 setIsModalOpen(true);
             })
             .catch(e => {
                 setIsModalOpen(true);
+                setLink("-");
                 console.log(e);
             });
     }
@@ -81,29 +88,29 @@ const SideNavLayout = ({ element, breadcrumb = [{ title: "Projects" }] }) => {
             ],
         },
         {
-            key: `project`,
+            key: `projects`,
             icon: createElement(ExperimentOutlined),
             label: `Project`,
             children: [
                 {
-                    key: "Projects Requests",
+                    key: "requestedProjects",
                     label: "Requested Projects",
                     onClick: () => {
                         navigate("/projects/requestedProjects", { replace: true });
                     }
                 },
                 {
-                    key: "Ongoing Projects",
+                    key: "projects",
                     label: "Ongoing Projects",
                     onClick: () => { navigate("/projects/projects", { replace: true }) }
                 },
                 {
-                    key: "Admin Projects",
+                    key: "createdProjects",
                     label: "Admin Projects",
                     onClick: () => { navigate("/projects/createdProjects", { replace: true }) }
                 },
                 {
-                    key: "All Projects",
+                    key: "all",
                     label: "All Projects",
                     onClick: () => { navigate("/projects/all") }
                 },
@@ -115,12 +122,12 @@ const SideNavLayout = ({ element, breadcrumb = [{ title: "Projects" }] }) => {
             label: `Tasks`,
             children: [
                 {
-                    key: "Pending Tasks",
+                    key: "pending",
                     label: "Pending Tasks",
                     onClick: () => { navigate("/tasks/auth/pending") }
                 },
                 {
-                    key: "Completed Tasks",
+                    key: "completed",
                     label: "Completed Tasks",
                     onClick: () => { navigate("/tasks/auth/completed") }
                 },
@@ -159,7 +166,7 @@ const SideNavLayout = ({ element, breadcrumb = [{ title: "Projects" }] }) => {
                     style={{
                         margin: '16px 0',
                     }}
-                    items={breadcrumb}
+                    items={urlSplitted.map(url => ({ title: url.toLocaleUpperCase()}))}
                 />
                 <Layout
                     style={{
@@ -178,7 +185,8 @@ const SideNavLayout = ({ element, breadcrumb = [{ title: "Projects" }] }) => {
                     >
                         <Menu
                             mode="inline"
-                            defaultOpenKeys={['project']}
+                            defaultSelectedKeys={[selectedKey]}
+                            defaultOpenKeys={[openedKey]}
                             style={{
                                 height: '100%',
                             }}

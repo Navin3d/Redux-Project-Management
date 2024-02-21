@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 import { isAuthenticated } from "../services/auth-service";
-import LoginPage from "../pages/LoginPage";
+import { useNavigate } from "react-router-dom";
 
 const ProtectedComponent = ({ component }) => {
-    const [auth, setAuth] = useState(isAuthenticated());
+    const navigate = useNavigate();
     useEffect(_ => {
-        setAuth(_ => isAuthenticated());
-    }, [auth]);
+        const authenticated = isAuthenticated();
+        authenticated == "false" && navigate("/login", { replace: false })
+    });
     return (
         <div>
-            { auth ? component : <LoginPage /> };
+            { component }
         </div>
     );
 };

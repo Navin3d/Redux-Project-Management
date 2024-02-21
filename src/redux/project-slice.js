@@ -21,7 +21,7 @@ const projectSlice = createSlice({
             state.hasRequested = action.payload.hasRequested;
         },
         destroyProject: (state) => {
-            state = {};
+            state = PROJECTS[0];
         },
     }
 });

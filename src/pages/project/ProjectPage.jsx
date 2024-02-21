@@ -84,7 +84,7 @@ const Content = _ => {
 const ProjectPage = _ => {
     const { id } = useParams();
     return (
-        <SideNavLayout element={<Content />} breadcrumb={[{ title: "Projects" }, { title: "Project" }, { title: id }]} />
+        <SideNavLayout element={<Content />} />
     );
 }
 

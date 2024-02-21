@@ -74,7 +74,7 @@ const Profile = _ => {
             </Row>
             <Row>
                 <Col span={12}>
-                    <DescriptionItem title="Department" content="Finance and Marketting" />
+                    <DescriptionItem title="Department" content="Finance & Risk Solutions" />
                 </Col>
                 <Col span={12}>
                     <DescriptionItem title="Supervisor" content={<a>Manoj Kumar</a>} />
@@ -97,11 +97,11 @@ const Profile = _ => {
                 </Col>
             </Row>
             <Divider />
-            <p className="site-description-item-profile-p">Working Projects</p>
+            <p className="site-description-item-profile-ps" key={"no"}>Working Projects</p>
             <Row>
                 {profile.projects.map(project => (
-                    <Col span={6}>
-                        <a target="_blank" href={`/project/${project.id}`}>{project.tittle}</a>
+                    <Col key={project.id} span={6}>
+                        <a key={project.id} target="_blank" href={`/project/${project.id}`}>{project.tittle}</a>
                     </Col>
                 ))}
             </Row>
@@ -109,8 +109,8 @@ const Profile = _ => {
             <p className="site-description-item-profile-p">Created Projects</p>
             <Row>
                 {profile.createdProjects.map(project => (
-                    <Col span={6}>
-                        <a target="_blank" href={`/project/${project.id}`}>{project.tittle}</a>
+                    <Col key={project.id} span={6}>
+                        <a key={project.id} target="_blank" href={`/project/${project.id}`}>{project.tittle}</a>
                     </Col>
                 ))}
             </Row>

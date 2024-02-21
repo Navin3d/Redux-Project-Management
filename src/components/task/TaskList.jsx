@@ -98,9 +98,11 @@ const TaskList = ({ kind = 'auth', status = "all" }) => {
                 )}
             />
             <Modal title="Task Comments" okText="Comment" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-                {
-                    tasks.filter(task => task.id == taskId)[0]?.comments?.map(comment => <h5>{comment}</h5>)
-                }
+                <ul>
+                    {
+                        tasks.filter(task => task.id == taskId)[0]?.comments?.map((comment, j) => <li key={j}>{comment}</li>)
+                    }
+                </ul>
                 <Input placeholder="Your Comment..." name="comment" value={comment} onChange={(e) => setComment(e.target.value)} />
             </Modal>
         </div>

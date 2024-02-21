@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { DEVELOPER } from "../data";
-import { JWT_TOKEN_KEY, verifyJwt } from "../services/auth-service";
+import { JWT_TOKEN_KEY, verifyJwt, logout } from "../services/auth-service";
 
 
 const token = localStorage.getItem(JWT_TOKEN_KEY);
@@ -30,7 +30,11 @@ export const authSlice = createSlice({
             state.authenticated = authenticated;
         },
         reset: (state) => {
-            state = {};
+            state.id = "";
+            state.token = "";
+            state.authenticated = false;
+            logout();
+            state = DEVELOPER;
         },
     },
 });
