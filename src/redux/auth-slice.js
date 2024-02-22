@@ -43,8 +43,11 @@ export const authSlice = createSlice({
             logout();
             state = DEVELOPER;
         },
+        createProject: (state, action) => {
+            state.createdProjects.push(action.payload);
+        }
     },
 });
 
-export const { initUser, reset, setToken, toggleTask } = authSlice.actions;
+export const { initUser, reset, setToken, toggleTask, createProject } = authSlice.actions;
 export default authSlice.reducer;

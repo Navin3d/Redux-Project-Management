@@ -10,6 +10,7 @@ import Profile from '../components/base/Profile';
 import { setProfile } from '../redux/profile-slice';
 import { DEVELOPER } from '../data';
 import { useDispatch } from 'react-redux';
+import FloatingButton from '../components/base/FloatingButton';
 const { Content, Sider } = Layout;
 
 
@@ -129,12 +130,12 @@ const SideNavLayout = ({ element }) => {
                 {
                     key: "pending",
                     label: "Pending Tasks",
-                    onClick: () => { navigate("/tasks/auth/pending") }
+                    onClick: () => { navigate("/tasks/auth/pending", { replace: true }) }
                 },
                 {
                     key: "completed",
                     label: "Completed Tasks",
-                    onClick: () => { navigate("/tasks/auth/completed") }
+                    onClick: () => { navigate("/tasks/auth/completed", { replace: true }) }
                 },
             ],
         },
@@ -147,7 +148,7 @@ const SideNavLayout = ({ element }) => {
                     key: "Parser",
                     icon: createElement(FolderOpenOutlined),
                     label: "Upload Projects",
-                    onClick: () => { navigate("/upload") }
+                    onClick: () => { navigate("/upload", { replace: true }) }
                 },
                 {
                     key: "toggle",
@@ -212,6 +213,7 @@ const SideNavLayout = ({ element }) => {
                     </Content>
                 </Layout>
             </Content>
+            <FloatingButton />
             <FooterComponent />
         </Layout>
     );

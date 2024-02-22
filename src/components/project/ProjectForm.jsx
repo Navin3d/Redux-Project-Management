@@ -1,5 +1,8 @@
-import { useState } from 'react';
-import { Button, Form, Input } from 'antd';
+import { useDispatch } from 'react-redux';
+import { Button, Form, Input, notification } from 'antd';
+import { editProject } from '../../redux/project-slice';
+import { createProject } from '../../redux/auth-slice';
+import { createOrUpdateProject } from '../../services/project-service';
 
 
 const ProjectForm = ({ projectData }) => {
@@ -21,11 +24,31 @@ const ProjectForm = ({ projectData }) => {
             range: '${label} must be between ${min} and ${max}',
         },
     };
+    const dispatch = useDispatch();
+    const [notice, contextHolder] = notification.useNotification();
     const onFinish = (values) => {
-        console.log("project ", { ...values["project"], createdBy: projectData.createdBy });
+        const project = { ...values["project"], createdBy: projectData.createdBy };
+        console.log("project ", project);
+        if (projectData["id"])
+            dispatch(editProject(project));
+        else
+            dispatch(createProject(project));
+        createOrUpdateProject(project)
+            .then(res => {
+                notice.success({
+                    message: `Project ${project.tittle} saved.`,
+                });
+            })
+            .catch(e => {
+                notice.error({
+                    message: e.message,
+                });
+                console.log(e)
+            });
     };
     return (
         <div>
+            {contextHolder}
             <Form
                 {...layout}
                 name="nest-messages"

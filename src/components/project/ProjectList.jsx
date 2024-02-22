@@ -2,8 +2,10 @@ import { useState, useEffect, createElement } from "react";
 import { Avatar, List, Space } from 'antd';
 import { useSelector } from "react-redux";
 import { LikeOutlined, MessageOutlined, StarOutlined } from '@ant-design/icons';
+import MarkdownComponent from "./Markdown";
 import { PROJECTS } from "../../data";
 import { fetchProjects } from "../../services/project-service";
+import { Link } from "react-router-dom";
 
 const ProjectList = ({ kind = "all" }) => {
 
@@ -68,14 +70,15 @@ const ProjectList = ({ kind = "all" }) => {
                 >
                     <List.Item.Meta
                         avatar={<Avatar src={item.icon} />}
-                        title={<a href={`/project/${item.id}`}>{item.tittle}</a>}
-                        description={item.description}
+                        title={<Link href={`/project/${item.id}`}>{item.tittle}</Link>}
+                        description={item.description.length <= 500 ? item.description : item.description.substring(0, 500) + "  ...more"}
                     />
-                    {item.content}
                 </List.Item>
             )}
         />
     );
 };
+
+// 9486112875 - french
 
 export default ProjectList;

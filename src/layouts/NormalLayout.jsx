@@ -2,6 +2,7 @@ import { Layout, theme } from 'antd';
 import HeaderComponent from '../components/base/HeaderComponent';
 import FooterComponent from '../components/base/Footer';
 import Profile from '../components/base/Profile';
+import FloatingButton from '../components/base/FloatingButton';
 const { Content } = Layout;
 
 const NormalLayout = ({ element }) => {
@@ -34,6 +35,7 @@ const NormalLayout = ({ element }) => {
                     </Content>
                 </Layout>
             </Content>
+            <FloatingButton />
             <FooterComponent />
         </Layout>
     );

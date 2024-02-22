@@ -39,8 +39,13 @@ const projectSlice = createSlice({
         destroyProject: (state) => {
             state = PROJECTS[0];
         },
+        editProject: (state, action) => {
+            const { tittle, description } = action.payload;
+            state.tittle = tittle;
+            state.description = description;
+        },
     }
 });
 
-export const { init, projectStatus, requestJoin, setFilter, destroyProject, setRequestedDeveloper, addDeveloper } = projectSlice.actions;
+export const { init, projectStatus, requestJoin, setFilter, destroyProject, setRequestedDeveloper, addDeveloper, editProject } = projectSlice.actions;
 export default projectSlice.reducer;
