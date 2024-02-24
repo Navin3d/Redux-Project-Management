@@ -1,42 +1,112 @@
-import React from 'react';
-import { InboxOutlined } from '@ant-design/icons';
-import { message, Upload } from 'antd';
+import React, { useState, useEffect } from 'react';
+import UploadBox from '../components/parser/UploadBox';
 import SideNavLayout from "../layouts/SideNavLayout";
-const { Dragger } = Upload;
+import { Button, message, Steps, theme, Popover } from 'antd';
+import { PreviewBox, RemarksBox } from '../components/parser/TextBox';
+
+const customDot = (dot, { status, index }) => (
+    <Popover
+        content={
+            <span>
+                step {index} status: {status}
+            </span>
+        }
+    >
+        {dot}
+    </Popover>
+);
 
 const UploadCompoent = _ => {
-
-    const props = {
-        name: 'file',
-        multiple: true,
-        action: 'https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188',
-        onChange(info) {
-            const { status } = info.file;
-            if (status !== 'uploading') {
-                console.log(info.file, info.fileList);
-            }
-            if (status === 'done') {
-                message.success(`${info.file.name} file uploaded successfully.`);
-            } else if (status === 'error') {
-                message.error(`${info.file.name} file upload failed.`);
-            }
-        },
-        onDrop(e) {
-            console.log('Dropped files', e.dataTransfer.files);
-        },
+    const { token } = theme.useToken();    
+    const [processStatus, setProcessState] = useState("process");    
+    const [nextDisabled, toggleNext] = useState(false);    
+    const [current, setCurrent] = useState(0);
+    const next = () => {
+        setCurrent(current + 1);
     };
-    
+    const prev = () => {
+        setCurrent(current - 1);
+    };
+    const items = [
+        {
+            title: 'Upload',
+            content: <UploadBox />,
+            description: "Kindly Select 3 files"
+        },
+        {
+            title: 'Validations',
+            content: <RemarksBox />,
+            description: "Error Handling"
+        },
+        {
+            title: 'Preview',
+            description: "Feel free to change at this point",
+            content: <PreviewBox />,
+        },
+        {
+            title: 'Finish',
+            description: "Completed!",
+            content: 'The Datas are saved to Database Successfully.',
+        },
+    ]
+
+    const contentStyle = {
+        lineHeight: '260px',
+        textAlign: 'center',
+        color: token.colorTextTertiary,
+        backgroundColor: token.colorFillAlter,
+        borderRadius: token.borderRadiusLG,
+        border: `1px dashed ${token.colorBorder}`,
+        marginTop: 16,
+    };
+
+    useEffect(() => {
+        progressEachStep();
+    }, [current]);
+
+    const progressEachStep = () => {
+
+    }
+
     return (
-        <Dragger {...props}>
-            <p className="ant-upload-drag-icon">
-                <InboxOutlined />
-            </p>
-            <p className="ant-upload-text">Click or drag file to this area to upload</p>
-            <p className="ant-upload-hint">
-                Support for a single or bulk upload. Strictly prohibited from uploading company data or other
-                banned files.
-            </p>
-        </Dragger>
+        <div>
+            <Steps
+                current={current}
+                items={items}
+                status={processStatus}
+                progressDot={customDot}
+            />
+            <div style={contentStyle}>{items[current].content}</div>
+            <div>
+                {current < items.length - 1 && (
+                    <Button
+                        disabled={nextDisabled}
+                        type="primary"
+                        onClick={() => next()}
+                    >
+                        Next
+                    </Button>
+                )}
+                {current === items.length - 1 && (
+                    <Button
+                        type="primary"
+                        onClick={() => message.success('Processing complete!')}
+                    >
+                        Done
+                    </Button>
+                )}
+                {current > 0 && (
+                    <Button
+                        style={{
+                            margin: '5% 8px',
+                        }}
+                        onClick={() => prev()}
+                    >
+                        Previous
+                    </Button>
+                )}
+            </div>
+        </div>
     );
 }
 
