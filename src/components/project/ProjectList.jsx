@@ -70,7 +70,7 @@ const ProjectList = ({ kind = "all" }) => {
                 >
                     <List.Item.Meta
                         avatar={<Avatar src={item.icon} />}
-                        title={<Link href={`/project/${item.id}`}>{item.tittle}</Link>}
+                        title={<Link to={`/project/${item.id}`}>{item.tittle}</Link>}
                         description={item.description.length <= 500 ? item.description : item.description.substring(0, 500) + "  ...more"}
                     />
                 </List.Item>

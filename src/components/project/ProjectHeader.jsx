@@ -70,7 +70,7 @@ const ProjectHeader = () => {
                     <Link onClick={() => { openProfile(createdBy["id"]) }}>{createdBy?.name}</Link>
                 </Descriptions.Item>
                 <Descriptions.Item label="Owner Profile">
-                    <Link target="_blank" href={createdBy?.linkedInProfile}>Linked IN</Link>
+                    <Link target="_blank" to={createdBy?.linkedInProfile}>Linked IN</Link>
                 </Descriptions.Item>
             </Descriptions>
         </PageHeader>
