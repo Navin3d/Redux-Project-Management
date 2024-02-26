@@ -147,3 +147,8 @@ export const createOrUpdateProject = projectData => {
     const authorization = localStorage.getItem(JWT_TOKEN_KEY);
     return api.post("/project", projectData, { headers: { Authorization: `Bearer ${authorization}` } });
 }
+
+export const batchUploadProject = projects => {
+    const authorization = localStorage.getItem(JWT_TOKEN_KEY);
+    return api.post("/project", projects, { headers: { Authorization: `Bearer ${authorization}` } });
+}

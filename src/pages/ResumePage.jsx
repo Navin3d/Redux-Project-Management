@@ -165,8 +165,8 @@ const PageContents = () => {
     );
 }
 
-const ParserPage = _ => {
+const ResumePage = _ => {
     return <SideNavLayout element={<PageContents />} />
 }
 
-export default ParserPage;
+export default ResumePage;

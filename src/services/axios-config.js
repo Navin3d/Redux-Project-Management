@@ -13,4 +13,10 @@ export const resumeAPI = axios.create({
     baseURL: RESUME_BASE_URL,
 });
 
+const VALIDATION_BASE_URL = "http://localhost:8000";
+
+export const validationAPI = axios.create({
+    baseURL: VALIDATION_BASE_URL,
+});
+
 export default api;

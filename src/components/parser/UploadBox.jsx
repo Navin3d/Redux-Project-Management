@@ -4,30 +4,20 @@ import { message, Upload } from 'antd';
 const { Dragger } = Upload;
 
 
-const UploadBox = ({ actionURL="http://127.0.0.1:8000/uploadfile/" }) => {
-    const [files, setFiles] = useState(null);
+const UploadBox = ({ actionURL }) => {
     const props = {
         name: "files",
         multiple: true,
         action: actionURL,
         onChange(info) {
             const { status } = info.file;
-            const fileCheck = []
             if (status !== 'uploading') {
-                // console.log(info.file, info.fileList);
-                // for (const file of info.fileList) {
-                //     const extension = file.name.split(".")[1]
-                //     fileCheck.push(file.name.split(".")[0])
-                //     if(extension != "csv" && extension != "xlxs" && extension != "xls") {
-                //         message.error(`${file.name} file extension must be [xlxs, csv, xls]`);
-                //     }
-                // }
-                // if(fileCheck.length > 3) {
-                //     message.error(`Upload Only 3 files.`);
-                // }
-                // if(fileCheck.indexOf("project") < 0 && fileCheck.indexOf("developer") < 0 && fileCheck.indexOf("task") < 0) {
-                //     message.error(`File name should match project, developer, task`);
-                // }
+                for (const file of info.fileList) {
+                    const extension = file.name.split(".")[1]
+                    if(extension != "csv" && extension != "xlxs" && extension != "xls") {
+                        message.error(`${file.name} file extension must be [xlxs, csv, xls]`);
+                    }
+                }
             }
             if (status === 'done') {
                 message.success(`${info.file.name} file uploaded successfully.`);

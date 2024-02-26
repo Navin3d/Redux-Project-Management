@@ -134,7 +134,7 @@ export const getProfile = id => {
     }`;
     const authorization = localStorage.getItem(JWT_TOKEN_KEY);
     console.log("Backend call profile")
-    return api.post(`/graphql`, { query }, { headers: { Authorization: `Bearer ${authorization}` } })
+    return api.post(`/graphql`, { query }, { headers: { Authorization: `Bearer ${authorization}` } });
 }
 
 export const getUserId = _ => localStorage.getItem(USER_ID_KEY);
@@ -144,4 +144,9 @@ export const logout = _ => {
     localStorage.removeItem(JWT_TOKEN_KEY);
     localStorage.removeItem(IS_AUTHENTICATED_KEY);
     verifyJwt("");
+}
+
+export const batchUploadDevelopers = developers => {
+    const authorization = localStorage.getItem(JWT_TOKEN_KEY);
+    return api.post(`/auth`, developers, { headers: { Authorization: `Bearer ${authorization}` } });
 }

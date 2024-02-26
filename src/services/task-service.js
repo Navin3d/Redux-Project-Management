@@ -11,3 +11,8 @@ export const commentTask = (taskId, comment) => {
     const authorization = localStorage.getItem(JWT_TOKEN_KEY);
     return api.get(`/task/${taskId}/comment/${comment}`, { headers: { Authorization: `Bearer ${authorization}` } });
 }
+
+export const batchUploadTask = tasks => {
+    const authorization = localStorage.getItem(JWT_TOKEN_KEY);
+    return api.post(`/task`, tasks, { headers: { Authorization: `Bearer ${authorization}` } });
+}
