@@ -1,6 +1,6 @@
 import { createElement, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { ExperimentOutlined, UserOutlined, ColumnWidthOutlined, FolderOpenOutlined, BugOutlined } from '@ant-design/icons';
+import { ExperimentOutlined, UserOutlined, ColumnWidthOutlined, FolderOpenOutlined, BugOutlined, FilePdfOutlined } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme, Modal } from 'antd';
 import { getProfile, toggleM2F } from '../services/auth-service';
 import HeaderComponent from '../components/base/HeaderComponent';
@@ -149,6 +149,12 @@ const SideNavLayout = ({ element }) => {
                     icon: createElement(FolderOpenOutlined),
                     label: "Upload Projects",
                     onClick: () => { navigate("/upload", { replace: true }) }
+                },
+                {
+                    key: "Resume Parser",
+                    icon: createElement(FilePdfOutlined),
+                    label: "Resume Parser",
+                    onClick: () => { navigate("/parser", { replace: true }) }
                 },
                 {
                     key: "toggle",

@@ -10,6 +10,7 @@ import ProjectListPage from "./pages/project/ProjectListPage";
 import TaskListPage from "./pages/task/TaskListPage";
 import UploadPage from "./pages/UploadPage";
 import CreateProjectPage from "./pages/project/CreateProjectPage";
+import ParserPage from "./pages/ParserPage";
 
 
 const routes = createBrowserRouter([
@@ -44,6 +45,10 @@ const routes = createBrowserRouter([
   {
     path: "/upload",
     element: <UploadPage />
+  },
+  {
+    path: "/parser",
+    element: <ParserPage />
   },
   {
     path: "*",

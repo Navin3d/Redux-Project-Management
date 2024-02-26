@@ -40,7 +40,7 @@ const Profile = _ => {
             </Row>
             <Row>
                 <Col span={12}>
-                    <DescriptionItem title="City" content="Chennai" />
+                    <DescriptionItem title="City" content={profile.place} />
                 </Col>
                 <Col span={12}>
                     <DescriptionItem title="Country" content="India" />
@@ -92,7 +92,7 @@ const Profile = _ => {
                 <Col span={24}>
                     <DescriptionItem
                         title="Skills"
-                        content="C / C + +, data structures, software engineering, operating systems, computer networks, databases, compiler theory, computer architecture, Microcomputer Principle and Interface Technology, Computer English, Java, ASP, etc."
+                        content={profile.skills}
                     />
                 </Col>
             </Row>
@@ -124,28 +124,39 @@ const Profile = _ => {
                     <DescriptionItem title="Phone Number" content="+91 944 2807 217" />
                 </Col>
             </Row>
-            <Row>
-                <Col span={12}>
-                    <DescriptionItem
-                        title="Github"
-                        content={
-                            <a href={profile.githubProfile}>
-                                {profile.githubProfile}
-                            </a>
+            <Divider />
+            {
+                profile.links.length > 0
+                    ?
+                    <Row>
+                        {
+                            profile.links.map(link => <Col span={12}><a target={"_blank"} href={link}>{link}</a><br /></Col>)
                         }
-                    />
-                </Col>
-                <Col span={12}>
-                    <DescriptionItem
-                        title="Linked IN"
-                        content={
-                            <a href={profile.linkedInProfile}>
-                                {profile.linkedInProfile}
-                            </a>
-                        }
-                    />
-                </Col>
-            </Row>
+                    </Row>
+                    :
+                    <Row>
+                        <Col span={12}>
+                            <DescriptionItem
+                                title="Github"
+                                content={
+                                    <a href={profile.githubProfile}>
+                                        {profile.githubProfile}
+                                    </a>
+                                }
+                            />
+                        </Col>
+                        <Col span={12}>
+                            <DescriptionItem
+                                title="Linked IN"
+                                content={
+                                    <a href={profile.linkedInProfile}>
+                                        {profile.linkedInProfile}
+                                    </a>
+                                }
+                            />
+                        </Col>
+                    </Row>
+            }
         </Drawer>
     );
 }
