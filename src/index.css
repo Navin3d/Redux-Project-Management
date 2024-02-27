@@ -383,18 +383,58 @@ footer a {
     background-color: rgba(0, 0, 0, 0.1);
     border-radius: 100px;
     transform: translateX(-50%);
-  }
-  
-  .toolbar-wrapper .anticon {
+}
+
+.toolbar-wrapper .anticon {
     padding: 12px;
     cursor: pointer;
-  }
-  
-  .toolbar-wrapper .anticon[disabled] {
+}
+
+.toolbar-wrapper .anticon[disabled] {
     cursor: not-allowed;
     opacity: 0.3;
-  }
-  
-  .toolbar-wrapper .anticon:hover {
+}
+
+.toolbar-wrapper .anticon:hover {
     opacity: 0.3;
-  }
+}
+
+
+
+
+
+
+
+.task-button {
+    display: flex;
+    align-items: center;
+    font-family: inherit;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 17px;
+    padding: 0.8em 1.3em 0.8em 0.9em;
+    color: white;
+    background: #ad5389;
+    background: linear-gradient(to right, #0f0c29, #302b63, #24243e);
+    border: none;
+    letter-spacing: 0.05em;
+    border-radius: 16px;
+}
+
+.task-button svg {
+    margin-right: 3px;
+    transform: rotate(30deg);
+    transition: transform 0.5s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.task-button span {
+    transition: transform 0.5s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.task-button:hover svg {
+    transform: translateX(5px) rotate(90deg);
+}
+
+.task-button:hover span {
+    transform: translateX(7px);
+}
