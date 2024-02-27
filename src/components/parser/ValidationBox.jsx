@@ -167,6 +167,21 @@ const RemarksBox = ({ validations }) => {
                     }
                 </div>
             }
+            {
+                validations[2]["invalidDeadlines"].length > 0
+                &&
+                <div>
+                    {
+                        validations[2]["invalidDeadlines"].map(error =>
+                            <Alert
+                                message="Task File: Assign realistic deadline after today."
+                                description={`Task with [${error.tittle}, assignedTo: ${error.assignedTo}, deadline: ${error.deadline}] as project id ${error.projectId} which is not in file.`}
+                                type="error"
+                            />
+                        )
+                    }
+                </div>
+            }
         </div>
     );
 }

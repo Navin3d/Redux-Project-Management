@@ -70,6 +70,7 @@ export const getDeveloper = _ => {
                 id
                 tittle
                 status
+                comments
                 description
                 assignedTo
                 projectId
@@ -148,5 +149,6 @@ export const logout = _ => {
 
 export const batchUploadDevelopers = developers => {
     const authorization = localStorage.getItem(JWT_TOKEN_KEY);
-    return api.post(`/auth`, developers, { headers: { Authorization: `Bearer ${authorization}` } });
+    console.log("developers", developers)
+    return api.post(`/auth/save-many`, developers, { headers: { Authorization: `Bearer ${authorization}` } });
 }

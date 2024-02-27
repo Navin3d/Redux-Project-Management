@@ -150,5 +150,13 @@ export const createOrUpdateProject = projectData => {
 
 export const batchUploadProject = projects => {
     const authorization = localStorage.getItem(JWT_TOKEN_KEY);
-    return api.post("/project", projects, { headers: { Authorization: `Bearer ${authorization}` } });
+    projects = projects.map(project => {
+        let data = {
+            ...project, developers: project["developers"] + ""?.split("||")
+        }
+        if (!Array.isArray(data["developers"]))
+            data["developers"] = [data["developers"]];
+        return data;
+    });
+    return api.post("/project/save-many", projects, { headers: { Authorization: `Bearer ${authorization}` } });
 }

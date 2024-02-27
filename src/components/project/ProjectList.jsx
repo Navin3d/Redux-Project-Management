@@ -16,12 +16,19 @@ const ProjectList = ({ kind = "all" }) => {
         if (kind == "all") {
             fetchProjects()
                 .then(res => {
-                    setProjects(prev => (res.data?.data?.projects.length > 0 ? res.data?.data?.projects : PROJECTS));
+                    console.log(res)
+                    try {
+                        const hhh = res.data?.data?.projects.length > 0 ? res.data?.data?.projects : PROJECTS;
+                        setProjects(hhh);
+                    } catch (e) {
+                        console.log(e);
+                        setProjects(PROJECTS);
+                    }
                 }).catch(e => {
                     console.log(e);
-                    setProjects(_ => PROJECTS);
+                    setProjects(PROJECTS);
                 });
-        } 
+        }
         else {
             setProjects(projectsFromState);
         }

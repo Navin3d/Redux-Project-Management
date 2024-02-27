@@ -64,7 +64,7 @@ const ProjectHeader = () => {
                     <Link>{tasks.length}</Link>
                 </Descriptions.Item>
                 <Descriptions.Item label="Start Date">
-                    <Link>{createdAt.split("T")[0]}</Link>
+                    <Link>{createdAt ? createdAt.split("T")[0] : "10 Days ago"}</Link>
                 </Descriptions.Item>
                 <Descriptions.Item label="Project Owner">
                     <Link onClick={() => { openProfile(createdBy["id"]) }}>{createdBy?.name}</Link>

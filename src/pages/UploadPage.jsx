@@ -68,7 +68,7 @@ const UploadCompoent = _ => {
                             });
                             console.log(e);
                         });
-                    currentBatchLength = 0;
+                    currentBatchLength = 1;
                     batchData = [];
                 }
                 if (developerIndex == developer.length - 1) {
@@ -80,6 +80,7 @@ const UploadCompoent = _ => {
                             });
                             console.log(e);
                         });
+                    currentBatchLength = 1;
                     batchData = [];
                 }
                 developerIndex++;
@@ -98,7 +99,7 @@ const UploadCompoent = _ => {
                             });
                             console.log(e);
                         });
-                    currentBatchLength = 0;
+                    currentBatchLength = 1;
                     batchData = [];
                 }
                 if (projectIndex == project.length - 1) {
@@ -110,6 +111,7 @@ const UploadCompoent = _ => {
                             });
                             console.log(e);
                         });
+                    currentBatchLength = 1;
                     batchData = [];
                 }
                 projectIndex++;
@@ -128,7 +130,7 @@ const UploadCompoent = _ => {
                             });
                             console.log(e);
                         });
-                    currentBatchLength = 0;
+                    currentBatchLength = 1;
                     batchData = [];
                 }
                 if (taskIndex == task.length - 1) {
@@ -141,6 +143,7 @@ const UploadCompoent = _ => {
                             });
                             console.log(e);
                         });
+                    currentBatchLength = 1;
                     batchData = [];
                 }
                 taskIndex++;
