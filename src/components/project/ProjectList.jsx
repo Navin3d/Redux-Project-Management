@@ -13,7 +13,7 @@ const ProjectList = ({ kind = "all" }) => {
     const projectsFromState = useSelector(state => state.auth[kind]);
 
     const initProjects = _ => {
-        if (kind == "all") {
+        if (kind === "all") {
             fetchProjects()
                 .then(res => {
                     console.log(res)
@@ -50,7 +50,7 @@ const ProjectList = ({ kind = "all" }) => {
             itemLayout="vertical"
             size="large"
             style={{
-                marginBottom: "5%"
+                marginBottom: "10%"
             }}
             pagination={{
                 onChange: (page) => {
@@ -85,7 +85,5 @@ const ProjectList = ({ kind = "all" }) => {
         />
     );
 };
-
-// 9486112875 - french
 
 export default ProjectList;

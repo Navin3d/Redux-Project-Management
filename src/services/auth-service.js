@@ -16,10 +16,9 @@ export const isM2FEnabled = emailId => api.get(`/auth/${emailId}`)
 
 export const login = data => api.post(`/auth/login`, data)
     .then(response => {
-        let userId;
         const jwt = response.data["access_token"];
         if (jwt) {
-            userId = verifyJwt(jwt);
+            verifyJwt(jwt);
         }
         return getDeveloper().then(res => {
             return {

@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Space } from 'antd'
 import { isAuthenticated } from "../services/auth-service";
 import SignInForm from "../components/auth/SignInForm";
 import SignUpForm from "../components/auth/SignUpForm";

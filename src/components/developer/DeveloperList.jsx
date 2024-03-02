@@ -16,20 +16,20 @@ const DeveloperList = ({ kind = 'developers' }) => {
 
     const handleRequestAccept = requesterId => {
         acceptJoinRequest(projectId, requesterId);
-        const requestedDevelopers = developers.filter(dev => dev?.id == requesterId);
-        const filtered = developers.filter(dev => dev?.id != requesterId);
+        const requestedDevelopers = developers.filter(dev => dev?.id === requesterId);
+        const filtered = developers.filter(dev => dev?.id !== requesterId);
         dispatch(setRequestedDeveloper(filtered));
         dispatch(addDeveloper(requestedDevelopers[0]));
     }
 
     const handleRequestReject = requesterId => {
-        const filtered = developers.filter(dev => dev?.id != requesterId);
+        const filtered = developers.filter(dev => dev?.id !== requesterId);
         dispatch(setRequestedDeveloper(filtered));
         rejectJoinRequest(projectId, requesterId);
     }
 
     const ProjectAdminAction = ({ requesterId }) => (
-        <div hidden={!isAdmin || kind != "requestedDevelopers"}>
+        <div hidden={!isAdmin || kind !== "requestedDevelopers"}>
             <Button onClick={() => { handleRequestAccept(requesterId) }} key="list-loadmore-edit">Accept</Button>&nbsp;
             <Button onClick={() => { handleRequestReject(requesterId) }} key="list-loadmore-Reject">Reject</Button>&nbsp;
         </div>
@@ -54,6 +54,9 @@ const DeveloperList = ({ kind = 'developers' }) => {
         <List
             itemLayout="horizontal"
             dataSource={developers}
+            style={{
+                marginBottom: "10%"
+            }}
             renderItem={(item) => (
                 <List.Item
                     key={item.id}

@@ -42,6 +42,7 @@ const Content = _ => {
                         const filter = userProjectFilter(DEVELOPER.id, projectData);
                         dispatch(init(projectData));
                         dispatch(setFilter(filter));
+                        console.log(e);
                     });
             })
             .catch(e => {
@@ -87,7 +88,7 @@ const Content = _ => {
 
     useEffect(() => {
         initPoject(id);
-    }, []);
+    }, [id]);
 
     return (
         <div>
@@ -104,7 +105,6 @@ const Content = _ => {
 }
 
 const ProjectPage = _ => {
-    const { id } = useParams();
     return (
         <SideNavLayout element={<Content />} />
     );
