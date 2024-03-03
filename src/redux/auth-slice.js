@@ -11,7 +11,7 @@ const initialState = {
     ...DEVELOPER,
     authenticated,
     token,
-    enabledWeb3: isWeb3Enabled(),
+    enabledWeb3: false,
 };
 
 export const authSlice = createSlice({

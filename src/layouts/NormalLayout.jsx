@@ -1,8 +1,8 @@
 import { Layout, theme } from 'antd';
-import HeaderComponent from '../components/base/HeaderComponent';
-import FooterComponent from '../components/base/Footer';
+import HeaderComponent from './HeaderComponent';
+import FooterComponent from './Footer';
+import FloatingButton from './FloatingButton';
 import Profile from '../components/base/Profile';
-import FloatingButton from '../components/base/FloatingButton';
 const { Content } = Layout;
 
 const NormalLayout = ({ element }) => {

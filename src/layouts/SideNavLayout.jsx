@@ -1,16 +1,16 @@
 import { createElement, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ExperimentOutlined, UserOutlined, ColumnWidthOutlined, FolderOpenOutlined, BugOutlined, FilePdfOutlined } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme, Modal } from 'antd';
 import { getProfile, toggleM2F } from '../services/auth-service';
-import HeaderComponent from '../components/base/HeaderComponent';
-import FooterComponent from '../components/base/Footer';
+import HeaderComponent from './HeaderComponent';
+import FooterComponent from './Footer';
+import FloatingButton from './FloatingButton';
 import ShowQRCode from '../components/auth/ShowQRCode';
 import Profile from '../components/base/Profile';
 import { setProfile } from '../redux/profile-slice';
 import { DEVELOPER } from '../data';
-import { useDispatch } from 'react-redux';
-import FloatingButton from '../components/base/FloatingButton';
 const { Content, Sider } = Layout;
 
 
