@@ -44,8 +44,21 @@ const projectSlice = createSlice({
             state.tittle = tittle;
             state.description = description;
         },
+        addTask: (state, action) => {
+            state.tasks.push(action.payload);
+        },
+        addComment: (state, action) => {
+            const taskToUpdate = state.tasks.find(item => item.id === action.payload.taskId);
+            taskToUpdate.comments.push(action.payload.comment);
+        },
+        togglePrrojectTaskStatus: (state, action) => {
+            const taskToUpdate = state.tasks.find(item => item.id === action.payload.taskId);
+            if (taskToUpdate) {
+                taskToUpdate.status = action.payload.status;
+            }
+        }
     }
 });
 
-export const { init, projectStatus, requestJoin, setFilter, destroyProject, setRequestedDeveloper, addDeveloper, editProject } = projectSlice.actions;
+export const { init, projectStatus, requestJoin, setFilter, destroyProject, setRequestedDeveloper, addDeveloper, editProject, addTask, addComment, togglePrrojectTaskStatus } = projectSlice.actions;
 export default projectSlice.reducer;

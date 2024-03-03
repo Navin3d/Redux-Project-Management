@@ -57,6 +57,8 @@ const ProjectList = ({ kind = "all" }) => {
                     console.log(page);
                 },
                 pageSize: 3,
+                position: "top",
+                align: "end",
             }}
             dataSource={projects}
             renderItem={(item) => (

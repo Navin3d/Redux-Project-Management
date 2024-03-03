@@ -13,4 +13,8 @@ const store = configureStore({
     },
 });
 
+store.subscribe(() => {
+    console.log('State has been refreshed or changed.');
+});
+
 export default store;

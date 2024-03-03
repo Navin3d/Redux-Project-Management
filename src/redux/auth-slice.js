@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { DEVELOPER } from "../data";
 import { JWT_TOKEN_KEY, verifyJwt, logout } from "../services/auth-service";
-import { isWeb3Enabled } from "../services/web3-service";
 
 
 const token = localStorage.getItem(JWT_TOKEN_KEY);
@@ -51,8 +50,11 @@ export const authSlice = createSlice({
         toggleWeb3: (state) => {
             state.enabledWeb3 = !state.enabledWeb3;
         },
+        addRequestProject: (state, action) => {
+            state.requestedProjects.push(action.payload)
+        }
     },
 });
 
-export const { initUser, reset, setToken, toggleTask, createProject, toggleWeb3 } = authSlice.actions;
+export const { initUser, reset, setToken, toggleTask, createProject, toggleWeb3, addRequestProject } = authSlice.actions;
 export default authSlice.reducer;

@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Avatar, Button, List, Modal, Input } from 'antd';
 import { commentTask, toggleTaskStatus } from "../../services/task-service";
 import { toggleTask } from '../../redux/auth-slice';
+import { addComment, togglePrrojectTaskStatus } from '../../redux/project-slice';
 
 const TaskList = ({ kind = 'auth', status = "all" }) => {
 
@@ -19,8 +20,14 @@ const TaskList = ({ kind = 'auth', status = "all" }) => {
 
     const handleToggleTask = task => {
         let restTasks = allUserTasks.filter(userTask => task.id != userTask.id);
-        dispatch(toggleTask({ taskId: task["id"], status: !task.status }));
-        setTasks(_ => restTasks);
+        const toggledTask = { taskId: task["id"], status: !task.status };
+        dispatch(toggleTask(toggledTask));
+        dispatch(togglePrrojectTaskStatus(toggledTask));
+
+        if(kind === "auth")
+            setTasks(_ => restTasks);
+        else
+            setTasks(allUserTasks);
         toggleTaskStatus(task.id, !task.status).catch(e => console.log(e));
     }
 
@@ -38,7 +45,7 @@ const TaskList = ({ kind = 'auth', status = "all" }) => {
             setTasks(prev => allUserTasks.filter(task => task.status == false));
         }
         if (status === "pending") {
-            setTasks(prev =>  allUserTasks.filter(task => task.status == true));
+            setTasks(prev => allUserTasks.filter(task => task.status == true));
         }
         if (status === "all") {
             setTasks(allUserTasks);
@@ -47,14 +54,15 @@ const TaskList = ({ kind = 'auth', status = "all" }) => {
 
     useEffect(_ => {
         initTasks();
-    }, [kind, status]);
+    }, [kind, status, allUserTasks]);
 
     const showModal = (id) => {
         setIsModalOpen(true);
         setTaskId(id);
     };
     const handleOk = () => {
-        if (comment.trim().length > 0)
+        if (comment.trim().length > 0) {
+            dispatch(addComment({ taskId, comment }));
             commentTask(taskId, comment)
                 .then(res => {
                     setTaskId("");
@@ -64,6 +72,7 @@ const TaskList = ({ kind = 'auth', status = "all" }) => {
                 .catch(e => {
                     console.log(e);
                 });
+        }
         setTaskId("");
         setComment("");
         setIsModalOpen(false);
@@ -81,6 +90,11 @@ const TaskList = ({ kind = 'auth', status = "all" }) => {
                 dataSource={tasks}
                 style={{
                     marginBottom: "10%"
+                }}
+                pagination={{
+                    position: "top",
+                    align: "end",
+                    pageSize: 2,
                 }}
                 renderItem={(item) => (
                     <List.Item
@@ -102,7 +116,7 @@ const TaskList = ({ kind = 'auth', status = "all" }) => {
             <Modal title="Task Comments" okText="Comment" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
                 <ul>
                     {
-                        tasks.filter(task => task.id === taskId)[0]?.comments?.map((comment, j) => <li key={j}>{comment}</li>)
+                        allUserTasks.filter(task => task.id === taskId)[0]?.comments?.map((comment, j) => <li key={j}>{comment}</li>)
                     }
                 </ul>
                 <Input placeholder="Your Comment..." name="comment" value={comment} onChange={(e) => setComment(e.target.value)} />

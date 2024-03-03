@@ -1,8 +1,11 @@
 import { useDispatch } from 'react-redux';
+import { useWriteContract } from 'wagmi';
 import { Button, Form, Input, notification } from 'antd';
 import { editProject } from '../../redux/project-slice';
 import { createProject } from '../../redux/auth-slice';
 import { createOrUpdateProject } from '../../services/project-service';
+import { projectToBlockchain } from '../../services/web3-service';
+import { useWeb3ModalAccount } from '@web3modal/ethers5/react';
 
 
 const ProjectForm = ({ projectData }) => {
@@ -24,8 +27,35 @@ const ProjectForm = ({ projectData }) => {
             range: '${label} must be between ${min} and ${max}',
         },
     };
+    const { isConnected, address } = useWeb3ModalAccount();
+    const { writeContractAsync } = useWriteContract();
     const dispatch = useDispatch();
     const [notice, contextHolder] = notification.useNotification();
+
+
+    const writeDataToblockchain = data => {
+        if (isConnected) {
+            projectToBlockchain({ ...data, ownerAddress: address }, writeContractAsync);
+            notice.success({
+                message: `Project Copyrights reserved.`,
+            });
+        }
+    };
+
+    const saveProject = project => createOrUpdateProject(project)
+        .then(res => {
+            notice.success({
+                message: `Project ${project.tittle} saved.`,
+            });
+            writeDataToblockchain(res.data);
+        })
+        .catch(e => {
+            notice.error({
+                message: e.message,
+            });
+            console.log(e)
+        });
+
     const onFinish = (values) => {
         const project = { ...values["project"], createdBy: projectData.createdBy };
         console.log("project ", project);
@@ -33,18 +63,7 @@ const ProjectForm = ({ projectData }) => {
             dispatch(editProject(project));
         else
             dispatch(createProject(project));
-        createOrUpdateProject(project)
-            .then(res => {
-                notice.success({
-                    message: `Project ${project.tittle} saved.`,
-                });
-            })
-            .catch(e => {
-                notice.error({
-                    message: e.message,
-                });
-                console.log(e)
-            });
+        saveProject(project);
     };
     return (
         <div>

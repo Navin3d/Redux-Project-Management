@@ -1,15 +1,32 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import ProjectForm from "../../components/project/ProjectForm";
 import SideNavLayout from "../../layouts/SideNavLayout";
-import { getUserId } from "../../services/auth-service";
+import { initUser } from "../../redux/auth-slice";
+import { getDeveloper } from "../../services/auth-service";
 
-
-const PROJECTINITIAL = {
-    "tittle": "",
-    "description": "",
-    "createdBy": getUserId(),
-}
 
 const Content = () => {
+
+    const dispatch = useDispatch();
+    const userId = useSelector(state => state.auth.id);
+    const PROJECTINITIAL = {
+        "tittle": "",
+        "description": "",
+        "createdBy": userId,
+    }
+
+    const initDeveloper = _ => getDeveloper()
+        .then(res => {
+            const developer = res.data["data"]["developer"];
+            dispatch(initUser(developer));
+        })
+        .catch(e => console.log(e));
+
+    useEffect(() => {
+        initDeveloper();
+    }, []);
+
     return (
         <div>
             <h1>Enterprise Your Idea!</h1><br/>

@@ -57,6 +57,10 @@ const DeveloperList = ({ kind = 'developers' }) => {
             style={{
                 marginBottom: "10%"
             }}
+            pagination={{
+                position: "top",
+                align: "end",
+            }}
             renderItem={(item) => (
                 <List.Item
                     key={item.id}

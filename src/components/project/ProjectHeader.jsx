@@ -1,20 +1,23 @@
 import { useState } from 'react';
-import { Button, Descriptions, Modal, DatePicker, Select, Space, Input } from 'antd';
+import { Button, Descriptions, Modal, DatePicker, Select, Space, Input, notification } from 'antd';
 import { Link } from 'react-router-dom';
 import { PageHeader } from '@ant-design/pro-layout';
 import { TrophyFilled, ClockCircleOutlined } from "@ant-design/icons";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleProject, requestJoinProject } from '../../services/project-service';
-import { projectStatus, requestJoin } from '../../redux/project-slice';
+import { addTask, projectStatus, requestJoin } from '../../redux/project-slice';
 import { getProfile } from '../../services/auth-service';
 import { setProfile } from '../../redux/profile-slice';
 import { DEVELOPER } from '../../data';
+import { assignTask } from '../../services/task-service';
+import { addRequestProject } from '../../redux/auth-slice';
 const { TextArea } = Input;
 
 
 const ProjectHeader = () => {
 
     const dispatch = useDispatch();
+    const [notice, contextHolder] = notification.useNotification();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const userId = useSelector(state => state.auth.id);
     const project = useSelector(state => state.project);
@@ -49,6 +52,7 @@ const ProjectHeader = () => {
         requestJoinProject(id, userId).then(res => {
             dispatch(requestJoin(!hasRequested));
         }).catch(e => console.log(e));
+        dispatch(addRequestProject(project));
     }
 
     const showModal = _ => {
@@ -56,7 +60,30 @@ const ProjectHeader = () => {
     };
     const handleOk = () => {
         setIsModalOpen(false);
-        console.log(newTask);
+        console.log({ ...newTask, projectId: id });
+
+        assignTask({ ...newTask, projectId: id })
+            .then(res => {
+                try {
+                    if(res.status === 200) {
+                        dispatch(addTask(res.data));
+                        notice.success({
+                            message: `Task ${newTask["tittle"]} assigned to developer.`
+                        });
+                    }
+                } catch (e) {
+                    console.log(e);
+                    notice.warning({
+                        message: e.message,
+                    });
+                }
+            })
+            .catch(e => {
+                console.log(e);
+                notice.warning({
+                    message: e.message,
+                });
+            });
     };
     const handleCancel = () => {
         setIsModalOpen(false);
@@ -68,7 +95,7 @@ const ProjectHeader = () => {
             onBack={() => window.history.back()}
             title={tittle}
             extra={[
-                <button className='task-button' onClick={showModal}>
+                <Button className='task-button' hidden={!isAdmin || !status} onClick={showModal}>
                     <svg
                         height="24"
                         width="24"
@@ -82,7 +109,7 @@ const ProjectHeader = () => {
                         ></path>
                     </svg>
                     <span>Add Task</span>
-                </button>,
+                </Button>,
                 <Button disabled={hasRequested} onClick={() => { handleRequestJoin(); }} hidden={isAdmin || isDeveloper || !status} key="1" style={{ backgroundColor: "grey", color: "white" }} >
                     <ClockCircleOutlined /> {hasRequested && status ? "Already Requested" : "Request Join"}
                 </Button>,
@@ -91,6 +118,7 @@ const ProjectHeader = () => {
                 </Button>,
             ]}
         >
+            {contextHolder}
             <Descriptions size="default" column={2}>
                 <Descriptions.Item label="Developers Working">
                     <Link>{developers.length}</Link>
@@ -113,10 +141,10 @@ const ProjectHeader = () => {
             </Descriptions>
             <Modal title="Task" okText="Assign" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
                 <Space direction="vertical" align='start'>
-                    <Input placeholder="Title" value={newTask.tittle} onChange={(e) => { setNewtask(prev => ({ ...prev, tittle: e.target.value}))} } />
+                    <Input placeholder="Title" value={newTask.tittle} onChange={(e) => { setNewtask(prev => ({ ...prev, tittle: e.target.value })) }} />
                     <TextArea
                         value={newTask.description}
-                        onChange={(e) => { setNewtask(prev => ({ ...prev, description: e.target.value}))} }
+                        onChange={(e) => { setNewtask(prev => ({ ...prev, description: e.target.value })) }}
                         placeholder="Description"
                         autoSize={{
                             minRows: 3,
@@ -136,33 +164,8 @@ const ProjectHeader = () => {
                             (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
                         }
                         value={newTask.assignedTo}
-                        // onChange={(e) => { setNewtask(prev => ({ ...prev, assignedTo: e.target.value}))} }
-                        options={[
-                            {
-                                value: '1',
-                                label: 'Not Identified',
-                            },
-                            {
-                                value: '2',
-                                label: 'Closed',
-                            },
-                            {
-                                value: '3',
-                                label: 'Communicated',
-                            },
-                            {
-                                value: '4',
-                                label: 'Identified',
-                            },
-                            {
-                                value: '5',
-                                label: 'Resolved',
-                            },
-                            {
-                                value: '6',
-                                label: 'Cancelled',
-                            },
-                        ]}
+                        onChange={(e) => { setNewtask(prev => ({ ...prev, assignedTo: e })) }}
+                        options={developers.map(developer => ({ label: developer["name"], value: developer["id"] }))}
                     />
                 </Space>
             </Modal>

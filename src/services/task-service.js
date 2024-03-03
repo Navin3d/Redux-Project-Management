@@ -1,6 +1,13 @@
 import { JWT_TOKEN_KEY } from "./auth-service";
 import api from "./axios-config";
 
+
+export const assignTask = task => {
+    console.log("backend call assignTask", `/task`);
+    const authorization = localStorage.getItem(JWT_TOKEN_KEY);
+    return api.post("/task", task, { headers: { Authorization: `Bearer ${authorization}` } });
+}
+
 export const toggleTaskStatus = (taskId, status) => {
     console.log("backend call toggleTaskStatus", `/task/${taskId}/status/${status}`);
     const authorization = localStorage.getItem(JWT_TOKEN_KEY);
