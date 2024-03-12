@@ -21,7 +21,7 @@ const ProjectHeader = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const userId = useSelector(state => state.auth.id);
     const project = useSelector(state => state.project);
-    const { id, status, tittle, description, developers, createdAt, createdBy, tasks, requestedDevelopers, hasRequested, isAdmin, isDeveloper } = project;
+    const { id, status, tittle, developers, createdAt, createdBy, tasks, requestedDevelopers, hasRequested, isAdmin, isDeveloper } = project;
 
     const INITIAL_NEW_TASK = {
         tittle: "",
@@ -29,6 +29,7 @@ const ProjectHeader = () => {
         deadline: "",
         projectId: id,
         assignedTo: "",
+        comments: [],
     }
     const [newTask, setNewtask] = useState(INITIAL_NEW_TASK);
 
@@ -80,6 +81,7 @@ const ProjectHeader = () => {
             })
             .catch(e => {
                 console.log(e);
+                dispatch(addTask(newTask));
                 notice.warning({
                     message: e.message,
                 });
