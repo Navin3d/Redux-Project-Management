@@ -49,7 +49,7 @@ const projectSlice = createSlice({
         },
         addComment: (state, action) => {
             const taskToUpdate = state.tasks.find(item => item.id === action.payload.taskId);
-            taskToUpdate.comments.push(action.payload.comment);
+            taskToUpdate?.comments.push(action.payload.comment);
         },
         togglePrrojectTaskStatus: (state, action) => {
             const taskToUpdate = state.tasks.find(item => item.id === action.payload.taskId);

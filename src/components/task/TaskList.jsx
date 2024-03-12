@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { Avatar, Button, List, Modal, Input } from 'antd';
+import { Avatar, Button, List, Modal, Input, notification } from 'antd';
 import { commentTask, toggleTaskStatus } from "../../services/task-service";
 import { toggleTask } from '../../redux/auth-slice';
 import { addComment, togglePrrojectTaskStatus } from '../../redux/project-slice';
@@ -13,6 +13,7 @@ const TaskList = ({ kind = 'auth', status = "all" }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const dispatch = useDispatch();
+    const [notice, contextHolder] = notification.useNotification();
     const userId = useSelector(state => state.auth.id);
     const isAdmin = useSelector(state => state.project.isAdmin);
     const isDeveloper = useSelector(state => state.project.isDeveloper);
@@ -28,7 +29,10 @@ const TaskList = ({ kind = 'auth', status = "all" }) => {
             setTasks(_ => restTasks);
         else
             setTasks(allUserTasks);
-        toggleTaskStatus(task.id, !task.status).catch(e => console.log(e));
+        toggleTaskStatus(task.id, !task.status).catch(e => {
+            console.log(e);
+            notice.warning({ message: e.message });
+        });
     }
 
     const onlyAssignedDeveloperOrAdmin = task => {
@@ -65,12 +69,14 @@ const TaskList = ({ kind = 'auth', status = "all" }) => {
             dispatch(addComment({ taskId, comment }));
             commentTask(taskId, comment)
                 .then(res => {
+                    notice.success({ message: "Commented", description: comment });
                     setTaskId("");
                     setComment("");
                     setIsModalOpen(false);
                 })
                 .catch(e => {
                     console.log(e);
+                    notice.warning({ message: e.message });
                 });
         }
         setTaskId("");
@@ -85,6 +91,7 @@ const TaskList = ({ kind = 'auth', status = "all" }) => {
 
     return (
         <div>
+            {contextHolder}
             <List
                 itemLayout="horizontal"
                 dataSource={tasks}

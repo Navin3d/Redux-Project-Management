@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Avatar, Button, List } from 'antd';
+import { Avatar, Button, List, notification } from 'antd';
 import { getProfile } from "../../services/auth-service";
 import { DEVELOPER } from "../../data";
 import { setProfile } from "../../redux/profile-slice";
@@ -9,13 +9,15 @@ import { addDeveloper, setRequestedDeveloper } from "../../redux/project-slice";
 
 
 const DeveloperList = ({ kind = 'developers' }) => {
+
     const dispatch = useDispatch();
+    const [notice, contextHolder] = notification.useNotification();
     const projectId = useSelector(state => state.project.id);
     const isAdmin = useSelector(state => state.project.isAdmin);
     const developers = useSelector(state => state.project[kind]);
 
     const handleRequestAccept = requesterId => {
-        acceptJoinRequest(projectId, requesterId);
+        acceptJoinRequest(projectId, requesterId).catch(e => notice.warning({ message: e.message }));
         const requestedDevelopers = developers.filter(dev => dev?.id === requesterId);
         const filtered = developers.filter(dev => dev?.id !== requesterId);
         dispatch(setRequestedDeveloper(filtered));
@@ -25,7 +27,7 @@ const DeveloperList = ({ kind = 'developers' }) => {
     const handleRequestReject = requesterId => {
         const filtered = developers.filter(dev => dev?.id !== requesterId);
         dispatch(setRequestedDeveloper(filtered));
-        rejectJoinRequest(projectId, requesterId);
+        rejectJoinRequest(projectId, requesterId).catch(e => notice.warning({ message: e.message }));
     }
 
     const ProjectAdminAction = ({ requesterId }) => (
@@ -51,30 +53,33 @@ const DeveloperList = ({ kind = 'developers' }) => {
     }, [kind]);
 
     return (
-        <List
-            itemLayout="horizontal"
-            dataSource={developers}
-            style={{
-                marginBottom: "10%"
-            }}
-            pagination={{
-                position: "top",
-                align: "end",
-            }}
-            renderItem={(item) => (
-                <List.Item
-                    key={item.id}
-                    actions={[<Button key="list-loadmore-more" onClick={() => handleOpenProfile(item.id)}>Profile</Button>, <ProjectAdminAction requesterId={item.id} />]}
-                >
-                    <List.Item.Meta
+        <div>
+            {contextHolder}
+            <List
+                itemLayout="horizontal"
+                dataSource={developers}
+                style={{
+                    marginBottom: "10%"
+                }}
+                pagination={{
+                    position: "top",
+                    align: "end",
+                }}
+                renderItem={(item) => (
+                    <List.Item
                         key={item.id}
-                        avatar={<Avatar src={item.profilePicUrl || "https://content.tupaki.com/twdata/2020/0920/news/Rajni-To-Not-Come-Out-For-Shooting-Till-Vaccine-Arrives--1601448273-1492.jpg"} />}
-                        title={item.name}
-                        description={item.email}
-                    />
-                </List.Item>
-            )}
-        />
+                        actions={[<Button key="list-loadmore-more" onClick={() => handleOpenProfile(item.id)}>Profile</Button>, <ProjectAdminAction requesterId={item.id} />]}
+                    >
+                        <List.Item.Meta
+                            key={item.id}
+                            avatar={<Avatar src={item.profilePicUrl || "https://content.tupaki.com/twdata/2020/0920/news/Rajni-To-Not-Come-Out-For-Shooting-Till-Vaccine-Arrives--1601448273-1492.jpg"} />}
+                            title={item.name}
+                            description={item.email}
+                        />
+                    </List.Item>
+                )}
+            />
+        </div>
     );
 };
 

@@ -2,7 +2,6 @@ import { useState, useEffect, createElement } from "react";
 import { Avatar, List, Space } from 'antd';
 import { useSelector } from "react-redux";
 import { LikeOutlined, MessageOutlined, StarOutlined } from '@ant-design/icons';
-import MarkdownComponent from "./Markdown";
 import { PROJECTS } from "../../data";
 import { fetchProjects } from "../../services/project-service";
 import { Link } from "react-router-dom";

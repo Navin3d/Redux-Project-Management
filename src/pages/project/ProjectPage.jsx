@@ -48,9 +48,8 @@ const Content = _ => {
             .catch(e => {
                 console.error(e);
                 let filter = userProjectFilter(userId, PROJECTS[0]);
-                dispatch(setFilter(filter));
                 dispatch(initUser(DEVELOPER));
-                dispatch(init(PROJECTS[0]));
+                dispatch(init({...PROJECTS[0], ...filter}));
                 notice.warning({
                     message: "Showing Dummy Datas",
                     description: "Error fetching data from backend showing dummy datas.",
