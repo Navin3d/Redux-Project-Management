@@ -2,7 +2,7 @@ import { createElement, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ExperimentOutlined, UserOutlined, ColumnWidthOutlined, FolderOpenOutlined, BugOutlined, FilePdfOutlined } from '@ant-design/icons';
-import { Breadcrumb, Layout, Menu, theme, Modal } from 'antd';
+import { Breadcrumb, Layout, Menu, theme, Modal, notification } from 'antd';
 import { getProfile, toggleM2F } from '../services/auth-service';
 import HeaderComponent from './HeaderComponent';
 import FooterComponent from './Footer';
@@ -22,7 +22,7 @@ const SideNavLayout = ({ element }) => {
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
-
+    const [notice, contextHolder] = notification.useNotification();
     const [collapsed, setCollapsed] = useState(false);
     const [link, setLink] = useState("-");
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -49,6 +49,7 @@ const SideNavLayout = ({ element }) => {
                 setIsModalOpen(true);
                 setLink("-");
                 console.log(e);
+                notice.warning({ message: e.message });
             });
     }
 
@@ -60,6 +61,7 @@ const SideNavLayout = ({ element }) => {
             .catch(e => {
                 console.log(e);
                 dispatch(setProfile(DEVELOPER))
+                notice.warning({ message: e.message });
             });
     }
 
@@ -73,7 +75,7 @@ const SideNavLayout = ({ element }) => {
                     key: "Disable M2D",
                     label: "Disable M2F",
                     onClick: () => {
-                        toggleM2F(false).catch(e => { console.log(e) });
+                        toggleM2F(false).then(res => { notice.success({ message: "Disabled successfully..." }); }).catch(e => { console.log(e); notice.warning({ message: e.message }); });
                     }
                 },
                 {
@@ -168,6 +170,7 @@ const SideNavLayout = ({ element }) => {
 
     return (
         <Layout>
+            {contextHolder}
             <HeaderComponent />
             <Content
                 style={{
